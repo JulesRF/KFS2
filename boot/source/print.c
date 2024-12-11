@@ -232,4 +232,18 @@ void	print_status( void ) {
 	isOn(isCtrlPressed, 154 + 80 * 3);
 }
 
+void	print_debug(char *str, unsigned char color) {
+
+	int	index = 0;
+	int	place = 346;
+	
+	while (str[index])
+	{
+		vga_buffer[place] = (unsigned short)str[index] | (unsigned short)color << 8;
+		index++;
+		place++;
+	}
+}
+
+
 // pitie laisse moi push

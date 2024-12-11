@@ -54,6 +54,7 @@ void shell_ter( void ) {
 		uint16 tmp_pos = terminal_index[screen] + 1;
         modify_cursor_position(tmp_pos - 1);
         print_status();
+        print_debug("DEBUG HERE", RED);
     
     while(69) {
 

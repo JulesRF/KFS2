@@ -95,7 +95,7 @@ void	print_letters(uint8 scancode) {
 			print_string(scancode_shift[scancode], temp_color);
 		else
 			print_string(scancode_strings[scancode], temp_color);
-		// SPACE HANDLER
+		// ENTER HANDLER
 		if (scancode == 0x1C && isCtrlPressed == 0) {
 
 			print_string("kfs-1 > ", L_BLUE);
