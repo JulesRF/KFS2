@@ -6,15 +6,38 @@
 /*   By: rdel-agu <rdel-agu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 17:06:33 by rdel-agu          #+#    #+#             */
-/*   Updated: 2024/12/11 11:13:44 by rdel-agu         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:42:45 by rdel-agu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/kfs.h"
 
-int	isShiftPressed = 0;
-int	isCapsPressed  = 0;
-int	isCtrlPressed  = 0;
+int		isShiftPressed = 0;
+int		isCapsPressed  = 0;
+int		isCtrlPressed  = 0;
+
+char	current_commands[25];
+int		commands_index = 0;
+
+char* scancode_strings[] = {
+
+		"ERROR",
+		""/*ESC*/, "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", ""/*BACKSPACE*/,
+		""/*TAB*/,	  "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "\n",
+		""/*L_CTRL*/,	 "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'", "`",
+		""/*L_SHFT*/, "\\", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", ""/*R_SHFT*/, "*"/*NUMPAD STAR*/,
+				""/*L_ALT*/, " "/*SPACE*/, "" /*CAPS_LOCK*/
+};
+
+char* scancode_shift[] = {
+
+		"ERROR",
+		""/*ESC*/, "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+", ""/*BACKSPACE*/,
+		""/*TAB*/,	  "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "{", "}", "\n",
+		""/*L_CTRL*/,	 "A", "S", "D", "F", "G", "H", "J", "K", "L", ":", "\"", "~",
+		""/*L_SHFT*/, "|", "Z", "X", "C", "V", "B", "N", "M", "<", ">", "?", ""/*R_SHFT*/, "*"/*NUMPAD STAR*/,
+				""/*L_ALT*/, " "/*SPACE*/, "" /*CAPS_LOCK*/  
+};
 
 uint8 keyboard_read_input() {
 
@@ -33,26 +56,6 @@ void	print_letters(uint8 scancode) {
 	// L_SHFT		0x2A
 	// R_SHFT		0x36
 	// L_ALT		0x38
-
-	char* scancode_strings[] = {
-
-		"ERROR",
-		""/*ESC*/, "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", ""/*BACKSPACE*/,
-		""/*TAB*/,	  "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "\n",
-		""/*L_CTRL*/,	 "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'", "`",
-		""/*L_SHFT*/, "\\", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", ""/*R_SHFT*/, "*"/*NUMPAD STAR*/,
-				""/*L_ALT*/, " "/*SPACE*/, "" /*CAPS_LOCK*/
-	};
-	
-	char* scancode_shift[] = {
-
-		"ERROR",
-		""/*ESC*/, "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+", ""/*BACKSPACE*/,
-		""/*TAB*/,	  "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "{", "}", "\n",
-		""/*L_CTRL*/,	 "A", "S", "D", "F", "G", "H", "J", "K", "L", ":", "\"", "~",
-		""/*L_SHFT*/, "|", "Z", "X", "C", "V", "B", "N", "M", "<", ">", "?", ""/*R_SHFT*/, "*"/*NUMPAD STAR*/,
-				""/*L_ALT*/, " "/*SPACE*/, "" /*CAPS_LOCK*/  
-	};
 
 	// Check if scancode is within valid range
 	if (scancode <= 0x3A) {
@@ -101,6 +104,11 @@ void	print_letters(uint8 scancode) {
 			print_string("kfs-1 > ", L_BLUE);
 			line_size[screen] = 0;
 			reset_cursor();
+			// TODO
+			print_debug(current_commands, RED);
+			for (int i = 0; i < 25; i++)
+				current_commands[i] = ' ';
+			commands_index = 0;
 		}
 		// F1-F10 PRESS
 	} else if (scancode >= 0x3B && scancode <=0x44 ) {
@@ -151,4 +159,9 @@ void	keyboard_init() {
 	
 	uint8 scancode = keyboard_read_input();
 	print_letters(scancode);
+	if (scancode <= 0x3A && scancode != 0x1C) {
+		
+		current_commands[commands_index] = scancode_strings[scancode][0];
+		commands_index++;
+	}
 }
