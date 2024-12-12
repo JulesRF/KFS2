@@ -134,7 +134,7 @@ void	ft_prompt()
     print_string("*--------------------*------------------------------------*--------------------*\n", color42);
 
 	line_size[screen] = 0;
-    print_string("kfs-1 > ", L_BLUE);
+    print_string("kfs-2 > ", L_BLUE);
 }
 
 void	ft_putnbr_hex(int nbr, unsigned char color)

@@ -124,7 +124,7 @@ void	print_letters(uint8 scancode) {
 		// ENTER HANDLER
 		if (scancode == 0x1C && isCtrlPressed == 0) {
 
-			print_string("kfs-1 > ", L_BLUE);
+			print_string("kfs-2 > ", L_BLUE);
 			line_size[screen] = 0;
 			reset_cursor();
 			// TODO

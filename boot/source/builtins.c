@@ -16,4 +16,8 @@ void    interpretor(char *str)
 {
     if (ft_strcmp(str, "hi") == 0)
         print_debug("Hell yea!", RED);
+	else if (ft_strcmp(str, "help") == 0)
+	{
+		print_string("Execute help cmd", WHITE);
+	}
 }
