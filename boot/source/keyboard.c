@@ -6,7 +6,7 @@
 /*   By: rdel-agu <rdel-agu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 17:06:33 by rdel-agu          #+#    #+#             */
-/*   Updated: 2024/12/12 11:49:36 by rdel-agu         ###   ########.fr       */
+/*   Updated: 2024/12/12 13:28:09 by rdel-agu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,10 @@
 int		isShiftPressed = 0;
 int		isCapsPressed  = 0;
 int		isCtrlPressed  = 0;
-
 char	current_commands[SIZE_COMMAND];
 int		commands_index = 0;
 
-char* scancode_strings[] = {
+char*	scancode_strings[] = {
 
 		"ERROR",
 		""/*ESC*/, "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", ""/*BACKSPACE*/,
@@ -30,7 +29,7 @@ char* scancode_strings[] = {
 				""/*L_ALT*/, " "/*SPACE*/, "" /*CAPS_LOCK*/
 };
 
-char* scancode_shift[] = {
+char*	scancode_shift[] = {
 
 		"ERROR",
 		""/*ESC*/, "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+", ""/*BACKSPACE*/,
@@ -40,7 +39,15 @@ char* scancode_shift[] = {
 				""/*L_ALT*/, " "/*SPACE*/, "" /*CAPS_LOCK*/  
 };
 
-uint8 keyboard_read_input() {
+// ESC			0x01
+// BACKSPACE	0x0E
+// TAB			0x0F
+// L_CTRL		0x1D
+// L_SHFT		0x2A
+// R_SHFT		0x36
+// L_ALT		0x38
+
+uint8	keyboard_read_input() {
 
 	while(!(inb(0x64) & 1));
 	return inb(0x60);
@@ -49,14 +56,6 @@ uint8 keyboard_read_input() {
 void	print_letters(uint8 scancode) {
 	
 	int	 temp_color = WHITE;
-
-	// ESC			0x01
-	// BACKSPACE	0x0E
-	// TAB			0x0F
-	// L_CTRL		0x1D
-	// L_SHFT		0x2A
-	// R_SHFT		0x36
-	// L_ALT		0x38
 
 	// Check if scancode is within valid range
 	if (scancode <= 0x3A) {
@@ -94,6 +93,7 @@ void	print_letters(uint8 scancode) {
 				clear_screen(screen);
 				ft_prompt();
 				reset_cursor();
+				print_string(current_commands, WHITE);
 			}
 			// TODO faire le ctrl + backspace pour retirer un mot entier
 			if (scancode == 0x0E) {

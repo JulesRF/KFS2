@@ -6,7 +6,7 @@
 #    By: rdel-agu <rdel-agu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/29 14:00:09 by rdel-agu          #+#    #+#              #
-#    Updated: 2024/12/11 10:53:11 by rdel-agu         ###   ########.fr        #
+#    Updated: 2024/12/12 13:23:06 by rdel-agu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,8 @@ CFILES = boot/source/kernel.c \
 		 boot/source/lib.c \
 		 boot/source/io.c \
 		 boot/source/keyboard.c \
-		 boot/source/gdt.c
+		 boot/source/gdt.c \
+		 boot/source/builtins.c
 
 OBJ = $(CFILES:.c=.o)
 

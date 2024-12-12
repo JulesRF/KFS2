@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   keyboard.h                                         :+:      :+:    :+:   */
+/*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rdel-agu <rdel-agu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/13 17:04:10 by rdel-agu          #+#    #+#             */
-/*   Updated: 2024/12/12 13:27:09 by rdel-agu         ###   ########.fr       */
+/*   Created: 2024/12/12 13:49:35 by rdel-agu          #+#    #+#             */
+/*   Updated: 2024/12/12 13:49:52 by rdel-agu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef KEYBOARD_H
-# define KEYBOARD_H
+#ifndef BUILTINS_H
+# define BUILTINS_H
 
-# include "kfs.h"
-
-void    keyboard_init();
-
-extern int     isShiftPressed;
-extern int     isCapsPressed;
-extern int     isCtrlPressed;
 
 
 #endif
