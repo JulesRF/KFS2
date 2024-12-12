@@ -6,7 +6,7 @@
 /*   By: rdel-agu <rdel-agu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 17:06:33 by rdel-agu          #+#    #+#             */
-/*   Updated: 2024/12/12 13:28:09 by rdel-agu         ###   ########.fr       */
+/*   Updated: 2024/12/12 14:18:26 by rdel-agu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	print_letters(uint8 scancode) {
 			{
 				current_commands[commands_index - 1] = ' ';
 				commands_index--;
-				// print_debug(current_commands, RED);
+				print_debug(current_commands, RED);
 			}
 		}
 		// CAPSLOCK PRESS
@@ -108,7 +108,7 @@ void	print_letters(uint8 scancode) {
 
 				current_commands[commands_index] = scancode_shift[scancode][0];
 				commands_index++;
-				// print_debug(current_commands, RED);
+				print_debug(current_commands, RED);
 			}
 		}
 		else
@@ -118,7 +118,7 @@ void	print_letters(uint8 scancode) {
 
 				current_commands[commands_index] = scancode_strings[scancode][0];
 				commands_index++;
-				// print_debug(current_commands, RED);
+				print_debug(current_commands, RED);
 			}
 		}
 		// ENTER HANDLER
@@ -129,9 +129,10 @@ void	print_letters(uint8 scancode) {
 			reset_cursor();
 			// TODO
 			current_commands[SIZE_COMMAND] = '\0';
-			print_debug(current_commands, RED);
+			// print_debug(current_commands, RED);
+			// interpretor(current_commands);
 			for (int i = 0; i < SIZE_COMMAND; i++)
-				current_commands[i] = ' ';
+				current_commands[i] = '\0';
 			commands_index = 0;
 			//
 		}
