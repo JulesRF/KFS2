@@ -245,5 +245,26 @@ void	print_debug(char *str, unsigned char color) {
 	}
 }
 
+void	print_char_debug(char str, unsigned char color)
+{
+    
+	vga_buffer[0] = (unsigned short)str | (unsigned short)color << 8;
+}
+
+void	putnbr_debug(int nbr, unsigned char color)
+{
+	if (nbr < 0)
+	{
+		print_char_debug('-', WHITE);
+		nbr = nbr * -1;
+	}
+	if (nbr <= 9)
+		print_char_debug(nbr + '0', color);
+	else
+	{
+		putnbr_debug(nbr / 10, color);
+		print_char_debug(nbr % 10 + '0', color);
+	}
+}
 
 // pitie laisse moi push

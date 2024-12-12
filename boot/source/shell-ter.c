@@ -6,7 +6,7 @@
 /*   By: rdel-agu <rdel-agu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:33:55 by rdel-agu          #+#    #+#             */
-/*   Updated: 2024/12/11 16:13:11 by rdel-agu         ###   ########.fr       */
+/*   Updated: 2024/12/12 11:49:50 by rdel-agu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void shell_ter( void ) {
 		uint16 tmp_pos = terminal_index[screen] + 1;
         modify_cursor_position(tmp_pos - 1);
         print_status();
-        print_debug("DEBUG HERE", RED);
     
     while(69) {
 

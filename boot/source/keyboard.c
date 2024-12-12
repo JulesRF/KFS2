@@ -6,17 +6,18 @@
 /*   By: rdel-agu <rdel-agu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 17:06:33 by rdel-agu          #+#    #+#             */
-/*   Updated: 2024/12/11 16:42:45 by rdel-agu         ###   ########.fr       */
+/*   Updated: 2024/12/12 11:49:36 by rdel-agu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/kfs.h"
+#define SIZE_COMMAND 29
 
 int		isShiftPressed = 0;
 int		isCapsPressed  = 0;
 int		isCtrlPressed  = 0;
 
-char	current_commands[25];
+char	current_commands[SIZE_COMMAND];
 int		commands_index = 0;
 
 char* scancode_strings[] = {
@@ -69,6 +70,12 @@ void	print_letters(uint8 scancode) {
 		// BACKSPACE PRESS
 		if (scancode == 0x0E) {
 			ft_backspace();
+			if (commands_index > 0)
+			{
+				current_commands[commands_index - 1] = ' ';
+				commands_index--;
+				// print_debug(current_commands, RED);
+			}
 		}
 		// CAPSLOCK PRESS
 		if (scancode == 0x3A) {
@@ -94,10 +101,26 @@ void	print_letters(uint8 scancode) {
 			}
 		}
 		// SHIFT HANDLER
-		else if (isShiftPressed == 1 || isCapsPressed == 1)			 
+		else if (isShiftPressed == 1 || isCapsPressed == 1)
+		{
 			print_string(scancode_shift[scancode], temp_color);
+			if (scancode != 0x1C && scancode != 0x2A && scancode != 0x36 && scancode != 0x0E && commands_index < SIZE_COMMAND - 1) {
+
+				current_commands[commands_index] = scancode_shift[scancode][0];
+				commands_index++;
+				// print_debug(current_commands, RED);
+			}
+		}
 		else
+		{
 			print_string(scancode_strings[scancode], temp_color);
+			if (scancode != 0x1C && scancode != 0x0E && commands_index < SIZE_COMMAND - 1) {
+
+				current_commands[commands_index] = scancode_strings[scancode][0];
+				commands_index++;
+				// print_debug(current_commands, RED);
+			}
+		}
 		// ENTER HANDLER
 		if (scancode == 0x1C && isCtrlPressed == 0) {
 
@@ -105,10 +128,12 @@ void	print_letters(uint8 scancode) {
 			line_size[screen] = 0;
 			reset_cursor();
 			// TODO
+			current_commands[SIZE_COMMAND] = '\0';
 			print_debug(current_commands, RED);
-			for (int i = 0; i < 25; i++)
+			for (int i = 0; i < SIZE_COMMAND; i++)
 				current_commands[i] = ' ';
 			commands_index = 0;
+			//
 		}
 		// F1-F10 PRESS
 	} else if (scancode >= 0x3B && scancode <=0x44 ) {
@@ -153,15 +178,11 @@ void	print_letters(uint8 scancode) {
 		// print_string("Unknown key\n", temp_color);
 		// ft_putnbr_hex(scancode, RED);
 	}
+	putnbr_debug(commands_index, RED);
 }
 
 void	keyboard_init() {
 	
 	uint8 scancode = keyboard_read_input();
 	print_letters(scancode);
-	if (scancode <= 0x3A && scancode != 0x1C) {
-		
-		current_commands[commands_index] = scancode_strings[scancode][0];
-		commands_index++;
-	}
 }
