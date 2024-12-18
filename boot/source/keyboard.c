@@ -6,7 +6,7 @@
 /*   By: rdel-agu <rdel-agu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 17:06:33 by rdel-agu          #+#    #+#             */
-/*   Updated: 2024/12/12 14:20:32 by rdel-agu         ###   ########.fr       */
+/*   Updated: 2024/12/12 14:30:44 by rdel-agu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	print_letters(uint8 scancode) {
 			{
 				current_commands[commands_index - 1] = ' ';
 				commands_index--;
-				print_debug(current_commands, RED);
+				// print_debug(current_commands, RED);
 			}
 		}
 		// CAPSLOCK PRESS
