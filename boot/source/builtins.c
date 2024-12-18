@@ -16,4 +16,11 @@ void    interpretor(char *str)
 {
     if (ft_strcmp(str, "hi") == 0)
         print_debug("Hell yea!", RED);
+	else if (ft_strcmp(str, "help") == 0)
+	{
+		print_string("--- HELP ---\n", WHITE);
+		print_string("help      print a short builtin man\n", WHITE);
+		print_string("reboot    not implemented yet\n", WHITE);
+		print_string("halt      not implemented yet\n", WHITE);
+	}
 }

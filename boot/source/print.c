@@ -127,14 +127,14 @@ void	ft_prompt()
 	int color42 = BROWN;
 
     print_string("*--------------------*------------------------------------*--------------------*", color42);
-    print_string("|     dP42  oP\"Yb.   |    Welcome to KFS-1!               |    SCREEN          |", color42);
+    print_string("|     dP42  oP\"Yb.   |    Welcome to KFS-2!               |    SCREEN          |", color42);
     print_string("|    dP 42  \"\' dP\'   |                                    |    CAPS_LOCK       |", color42);
     print_string("|   d242424   dP'    |    Made by jroux-fo && rdel-agu    |    SHIFT           |", color42);
     print_string("|       42  .d4242   |                                    |    CTRL            |", color42);
     print_string("*--------------------*------------------------------------*--------------------*\n", color42);
 
 	line_size[screen] = 0;
-    print_string("kfs-1 > ", L_BLUE);
+    print_string("kfs-2 > ", L_BLUE);
 }
 
 void	ft_putnbr_hex(int nbr, unsigned char color)
