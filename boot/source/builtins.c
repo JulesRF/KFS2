@@ -6,7 +6,7 @@
 /*   By: rdel-agu <rdel-agu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 13:22:14 by rdel-agu          #+#    #+#             */
-/*   Updated: 2024/12/18 14:48:46 by rdel-agu         ###   ########.fr       */
+/*   Updated: 2024/12/20 15:28:33 by rdel-agu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ int		ft_is_only_space(char *str) {
 
 void    interpretor(char *str)
 {
-    if (ft_strcmp(str, "hi") == 0)
-        print_debug("Hell yea!", RED);
-	else if (ft_strcmp(str, "help") == 0)
+    if (ft_strcmp(str, "help") == 0)
 	{
 		print_string("--- HELP ---\n", WHITE);
 		print_string("help      print a short builtin man\n", WHITE);
@@ -44,6 +42,8 @@ void    interpretor(char *str)
 		// DO NOTHING
 	}
 	else{
-		print_string("command not found: \n", RED);
+		print_string("command not found: ", WHITE);
+		print_string(str, WHITE);
+		print_string("\n", WHITE);
 	}
 }

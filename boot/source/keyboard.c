@@ -6,19 +6,19 @@
 /*   By: rdel-agu <rdel-agu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 17:06:33 by rdel-agu          #+#    #+#             */
-/*   Updated: 2024/12/20 13:54:52 by rdel-agu         ###   ########.fr       */
+/*   Updated: 2024/12/20 15:40:06 by rdel-agu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/kfs.h"
-#define SIZE_COMMAND 20
+#define SIZE_COMMAND 2000
 #define L_ALT 0x38
 
 int		isShiftPressed = 0;
 int		isCapsPressed  = 0;
 int		isCtrlPressed  = 0;
-char	current_commands[SIZE_COMMAND];
-int		commands_index = 0;
+char	current_commands[2][SIZE_COMMAND];
+int		commands_index[2] = {0, 0};
 
 char*	scancode_strings[] = {
 
@@ -51,7 +51,7 @@ char*	scancode_shift[] = {
 void	clean_command_buffer() {
 	
 	for (int i = 0; i < SIZE_COMMAND; i++)
-		current_commands[i] = '\0';
+		current_commands[screen][i] = '\0';
 }
 
 uint8	keyboard_read_input() {
@@ -68,7 +68,6 @@ int		is_printable(uint8 scancode) {
 		scancode != 0xBA && scancode != 0x38)
 		return (1);
 	return (0);
-	
 }
 
 void	print_letters(uint8 scancode) {
@@ -87,11 +86,11 @@ void	print_letters(uint8 scancode) {
 		// BACKSPACE PRESS
 		if (scancode == 0x0E) {
 			ft_backspace();
-			if (commands_index > 0)
+			if (commands_index[screen] > 0)
 			{
-				current_commands[commands_index - 1] = ' ';
-				commands_index--;
-				if (commands_index == 0)
+				current_commands[screen][commands_index[screen] - 1] = ' ';
+				commands_index[screen]--;
+				if (commands_index[screen] == 0)
 					clean_command_buffer();
 				// print_debug(current_commands, RED);
 			}
@@ -113,7 +112,7 @@ void	print_letters(uint8 scancode) {
 				clear_screen(screen);
 				ft_prompt();
 				reset_cursor();
-				print_string(current_commands, WHITE);
+				print_string(current_commands[screen], WHITE);
 			}
 			// TODO faire le ctrl + backspace pour retirer un mot entier
 			if (scancode == 0x0E) {
@@ -123,37 +122,37 @@ void	print_letters(uint8 scancode) {
 		// SHIFT HANDLER
 		else if (isShiftPressed == 1 || isCapsPressed == 1)
 		{
-			if (commands_index < SIZE_COMMAND) {
+			if (commands_index[screen] < SIZE_COMMAND) {
 				
 				print_string(scancode_shift[scancode], temp_color);
-				if (is_printable(scancode) == 1 && commands_index < SIZE_COMMAND - 1) {
-					current_commands[commands_index] = scancode_shift[scancode][0];
-					commands_index++;
+				if (is_printable(scancode) == 1 && commands_index[screen] < SIZE_COMMAND) {
+					current_commands[screen][commands_index[screen]] = scancode_shift[scancode][0];
+					commands_index[screen]++;
 				}
 				// print_debug(current_commands, RED);
 			}
 		}
 		else
 		{
-			if (commands_index < SIZE_COMMAND) {
+			if (commands_index[screen] < SIZE_COMMAND) {
 
 				print_string(scancode_strings[scancode], temp_color);
-				if (is_printable(scancode) == 1 && commands_index < SIZE_COMMAND - 1) {
+				if (is_printable(scancode) == 1 && commands_index[screen] < SIZE_COMMAND) {
 					
-					current_commands[commands_index] = scancode_strings[scancode][0];
-					commands_index++;
+					current_commands[screen][commands_index[screen]] = scancode_strings[scancode][0];
+					commands_index[screen]++;
 				}
-					// print_debug(current_commands, RED);
+				// print_debug(current_commands, RED);
 			}
 		}
 		// ENTER HANDLER
 		if (scancode == 0x1C && isCtrlPressed == 0) {
 
-			current_commands[SIZE_COMMAND] = '\0';
-			print_debug(current_commands, RED);
-			interpretor(current_commands);
+			current_commands[screen][commands_index[screen]] = '\0';
+			print_debug(current_commands[screen], RED);
+			interpretor(current_commands[screen]);
 			clean_command_buffer();
-			commands_index = 0;
+			commands_index[screen] = 0;
 			print_string("kfs-2 > ", L_BLUE);
 			line_size[screen] = 0;
 			reset_cursor();
@@ -202,7 +201,7 @@ void	print_letters(uint8 scancode) {
 		// print_string("Unknown key\n", temp_color);
 		// ft_putnbr_hex(scancode, RED);
 	}
-	putnbr_debug(commands_index, RED);
+	putnbr_debug(commands_index[screen], RED);
 }
 
 void	keyboard_init() {
