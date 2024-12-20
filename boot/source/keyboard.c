@@ -6,12 +6,13 @@
 /*   By: rdel-agu <rdel-agu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 17:06:33 by rdel-agu          #+#    #+#             */
-/*   Updated: 2024/12/12 14:30:44 by rdel-agu         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:54:52 by rdel-agu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/kfs.h"
-#define SIZE_COMMAND 29
+#define SIZE_COMMAND 20
+#define L_ALT 0x38
 
 int		isShiftPressed = 0;
 int		isCapsPressed  = 0;
@@ -47,10 +48,27 @@ char*	scancode_shift[] = {
 // R_SHFT		0x36
 // L_ALT		0x38
 
+void	clean_command_buffer() {
+	
+	for (int i = 0; i < SIZE_COMMAND; i++)
+		current_commands[i] = '\0';
+}
+
 uint8	keyboard_read_input() {
 
 	while(!(inb(0x64) & 1));
 	return inb(0x60);
+}
+
+int		is_printable(uint8 scancode) {
+
+	if (scancode != 0x1C && scancode != 0x2A && scancode != 0x36 && \
+		scancode != 0x0E && scancode != 0x01 && scancode != 0x38 && \
+		scancode != 0x0F && scancode != 0x3A && scancode != 0xE0 && \
+		scancode != 0xBA && scancode != 0x38)
+		return (1);
+	return (0);
+	
 }
 
 void	print_letters(uint8 scancode) {
@@ -73,6 +91,8 @@ void	print_letters(uint8 scancode) {
 			{
 				current_commands[commands_index - 1] = ' ';
 				commands_index--;
+				if (commands_index == 0)
+					clean_command_buffer();
 				// print_debug(current_commands, RED);
 			}
 		}
@@ -103,35 +123,37 @@ void	print_letters(uint8 scancode) {
 		// SHIFT HANDLER
 		else if (isShiftPressed == 1 || isCapsPressed == 1)
 		{
-			print_string(scancode_shift[scancode], temp_color);
-			if (scancode != 0x1C && scancode != 0x2A && scancode != 0x36 && scancode != 0x0E && commands_index < SIZE_COMMAND - 1) {
-
-				current_commands[commands_index] = scancode_shift[scancode][0];
-				commands_index++;
+			if (commands_index < SIZE_COMMAND) {
+				
+				print_string(scancode_shift[scancode], temp_color);
+				if (is_printable(scancode) == 1 && commands_index < SIZE_COMMAND - 1) {
+					current_commands[commands_index] = scancode_shift[scancode][0];
+					commands_index++;
+				}
 				// print_debug(current_commands, RED);
 			}
 		}
 		else
 		{
-			print_string(scancode_strings[scancode], temp_color);
-			if (scancode != 0x1C && scancode != 0x0E && commands_index < SIZE_COMMAND - 1) {
+			if (commands_index < SIZE_COMMAND) {
 
-				current_commands[commands_index] = scancode_strings[scancode][0];
-				commands_index++;
-				// print_debug(current_commands, RED);
+				print_string(scancode_strings[scancode], temp_color);
+				if (is_printable(scancode) == 1 && commands_index < SIZE_COMMAND - 1) {
+					
+					current_commands[commands_index] = scancode_strings[scancode][0];
+					commands_index++;
+				}
+					// print_debug(current_commands, RED);
 			}
 		}
 		// ENTER HANDLER
 		if (scancode == 0x1C && isCtrlPressed == 0) {
 
 			current_commands[SIZE_COMMAND] = '\0';
-			// print_debug(current_commands, RED);
+			print_debug(current_commands, RED);
 			interpretor(current_commands);
-			for (int i = 0; i < SIZE_COMMAND; i++)
-				current_commands[i] = '\0';
+			clean_command_buffer();
 			commands_index = 0;
-
-
 			print_string("kfs-2 > ", L_BLUE);
 			line_size[screen] = 0;
 			reset_cursor();
