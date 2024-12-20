@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   keyboard.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rdel-agu <rdel-agu@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/13 17:06:33 by rdel-agu          #+#    #+#             */
-/*   Updated: 2024/12/20 15:40:06 by rdel-agu         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "include/kfs.h"
 #define SIZE_COMMAND 2000
 #define L_ALT 0x38
@@ -183,6 +171,7 @@ void	print_letters(uint8 scancode) {
 
 		switch (scancode) {												
 			case 0xCB:
+				// terminal_index[screen]--;
 				// print_string("left", L_CYAN);
 				break;
 			case 0xC8:

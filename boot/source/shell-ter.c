@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   shell-ter.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rdel-agu <rdel-agu@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/08 15:33:55 by rdel-agu          #+#    #+#             */
-/*   Updated: 2024/12/12 11:49:50 by rdel-agu         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "include/kfs.h"
 #include "include/io.h"
 
@@ -50,18 +38,22 @@ void shell_ter( void ) {
 	screen = 0;
 
 		vga_buffer[terminal_index[screen]] = (unsigned short)' ' | (unsigned short)WHITE << 8;
-    	vga_buffer[terminal_index[screen] + 1] = (unsigned short)' ' | (unsigned short)WHITE << 8;
-		uint16 tmp_pos = terminal_index[screen] + 1;
-        modify_cursor_position(tmp_pos - 1);
+    	// vga_buffer[terminal_index[screen] + 1] = (unsigned short)' ' | (unsigned short)WHITE << 8;
+		// uint16 tmp_pos = terminal_index[screen] + 1;
+		uint16 tmp_pos = terminal_index[screen];
+        // modify_cursor_position(tmp_pos - 1);
+        modify_cursor_position(tmp_pos);
         print_status();
     
     while(69) {
 
         keyboard_init();
 		vga_buffer[terminal_index[screen]] = (unsigned short)' ' | (unsigned short)WHITE << 8;
-		vga_buffer[terminal_index[screen] + 1] = (unsigned short)' ' | (unsigned short)WHITE << 8;
-		uint16 pos = terminal_index[screen] + 1;
-        modify_cursor_position(pos - 1);
+		// vga_buffer[terminal_index[screen] + 1] = (unsigned short)' ' | (unsigned short)WHITE << 8;
+		// uint16 pos = terminal_index[screen + 1];
+		uint16 pos = terminal_index[screen];
+        // modify_cursor_position(pos - 1);
+        modify_cursor_position(pos);
         print_status();
     }
 }
