@@ -26,6 +26,7 @@
 extern uint16	*vga_buffer;
 extern uint16	terminal_buffer[2][VGA_ADDRESS];
 extern uint32	terminal_index[2];
+extern uint32	cursor_index[2];
 extern uint32	vga_index;
 extern uint32	screen;
 extern uint32	line_size[2];
@@ -34,6 +35,7 @@ void    clear_screen(int screen);
 void	ft_switch_screen();
 void    print_string(char* str, unsigned char color);
 void    print_char(char str, unsigned char color);
+void	ft_goback();
 void	ft_backspace();
 int     ft_isnewl(const char *str, int i);
 void	ft_prompt();
@@ -44,6 +46,7 @@ void	ft_ctrl_backspace();
 void    *ft_memset(void *b, int c, uint16 len);
 void	print_status( void );
 ////    DEBUG
+void	print_char_debug(char str, unsigned char color);
 void	print_debug(char *str, unsigned char color);
 void	putnbr_debug(int nbr, unsigned char color);
 

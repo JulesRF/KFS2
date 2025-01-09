@@ -1,5 +1,4 @@
 #include "include/kfs.h"
-#define SIZE_COMMAND 2000
 #define L_ALT 0x38
 
 int		isShiftPressed = 0;
@@ -171,7 +170,7 @@ void	print_letters(uint8 scancode) {
 
 		switch (scancode) {												
 			case 0xCB:
-				// terminal_index[screen]--;
+				ft_goback();
 				// print_string("left", L_CYAN);
 				break;
 			case 0xC8:

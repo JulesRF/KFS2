@@ -12,6 +12,7 @@
 
 #ifndef KEYBOARD_H
 # define KEYBOARD_H
+# define SIZE_COMMAND 2000
 
 # include "kfs.h"
 
@@ -20,6 +21,9 @@ void    keyboard_init();
 extern int     isShiftPressed;
 extern int     isCapsPressed;
 extern int     isCtrlPressed;
+extern char	current_commands[2][SIZE_COMMAND];
+extern int		commands_index[2];
+
 
 
 #endif

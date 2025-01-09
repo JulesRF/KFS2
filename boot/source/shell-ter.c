@@ -40,7 +40,11 @@ void shell_ter( void ) {
 		vga_buffer[terminal_index[screen]] = (unsigned short)' ' | (unsigned short)WHITE << 8;
     	// vga_buffer[terminal_index[screen] + 1] = (unsigned short)' ' | (unsigned short)WHITE << 8;
 		// uint16 tmp_pos = terminal_index[screen] + 1;
-		uint16 tmp_pos = terminal_index[screen];
+        uint16 tmp_pos;
+        if (cursor_index[screen] == 5000)
+	    	tmp_pos = terminal_index[screen];
+        else
+            tmp_pos = cursor_index[screen];
         // modify_cursor_position(tmp_pos - 1);
         modify_cursor_position(tmp_pos);
         print_status();
@@ -51,7 +55,12 @@ void shell_ter( void ) {
 		vga_buffer[terminal_index[screen]] = (unsigned short)' ' | (unsigned short)WHITE << 8;
 		// vga_buffer[terminal_index[screen] + 1] = (unsigned short)' ' | (unsigned short)WHITE << 8;
 		// uint16 pos = terminal_index[screen + 1];
-		uint16 pos = terminal_index[screen];
+		// uint16 pos = terminal_index[screen];
+        uint16 pos;
+         if (cursor_index[screen] == 5000)
+	    	pos = terminal_index[screen];
+        else
+            pos = cursor_index[screen];
         // modify_cursor_position(pos - 1);
         modify_cursor_position(pos);
         print_status();

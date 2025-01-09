@@ -4,6 +4,7 @@
 uint16	*vga_buffer;
 uint16	terminal_buffer[2][VGA_ADDRESS];
 uint32	terminal_index[2];
+uint32	cursor_index[2] = {5000, 5000};
 uint32	vga_index;
 uint32	screen = 0;
 uint32	line_size[2];
@@ -12,6 +13,7 @@ void	clear_screen2(int this_screen)
 {
 	ft_memset(terminal_buffer[this_screen], 0x00, 80 * 25 * 2);
 	terminal_index[this_screen] = 0;
+	cursor_index[this_screen] = 5000;
 	line_size[this_screen] = 0;
 }
 
@@ -60,8 +62,96 @@ void	ft_scroll_screen()
 	reset_cursor();
 }
 
+void	print_shifted(char *str, unsigned char color)
+{
+	char buffer[256];
+	unsigned int index = 0;
+	int jndex = 0;
+
+	// copy command to buffer
+	while (current_commands[screen][index])
+	{
+		buffer[index] = current_commands[screen][index];
+		index++;
+	}
+	buffer[index] = '\0';
+	(void)buffer;
+
+	//clean command from end to cursor_index
+	// index = terminal_index[screen] - index;
+	index = terminal_index[screen];
+	while (index > cursor_index[screen])
+	{
+		current_commands[screen][index] = ' ';
+		terminal_buffer[screen][index] = ' ';
+		vga_buffer[index] = (unsigned short)' ' | (unsigned short)WHITE << 8;
+		index--;
+	}
+
+	//write the added string/character at the cursor index
+	index = cursor_index[screen];
+	jndex = 0;
+	while (str[jndex])
+	{
+		current_commands[screen][index] = (unsigned short)str[jndex] | (unsigned short)color << 8;
+		terminal_buffer[screen][index] = (unsigned short)str[jndex] | (unsigned short)color << 8;
+		vga_buffer[index] = terminal_buffer[screen][index];
+		jndex++;
+		index++;
+		terminal_index[screen]++;
+		cursor_index[screen]++;
+	}
+	print_debug(buffer, WHITE);
+
+	//copy the content of buffer into command and vga
+	
+	index = cursor_index[screen];
+	while(buffer[index])
+	{
+		current_commands[screen][index] = (unsigned short)buffer[index] | (unsigned short)color << 8;
+		terminal_buffer[screen][index] = (unsigned short)buffer[index] | (unsigned short)color << 8;
+		vga_buffer[index] = terminal_buffer[screen][index];
+		index++;
+		terminal_index[screen]++;
+		cursor_index[screen]++;
+	}
+	// while(buffer[index - jndex])
+	// {
+	// 	current_commands[screen][index] = (unsigned short)buffer[index + jndex] | (unsigned short)color << 8;
+	// 	terminal_buffer[screen][index] = (unsigned short)buffer[index + jndex] | (unsigned short)color << 8;
+	// 	vga_buffer[index] = terminal_buffer[screen][index];
+	// 	index++;
+	// 	terminal_index[screen]++;
+	// 	cursor_index[screen]++;
+	// }
+
+	
+
+	// while (str[index])
+    // {
+    //     ft_isnewl(str, index);
+	// 	if (str[index] == 8)
+	// 		ft_backspace();
+	// 	else if (str[index] != '\n')
+	// 	{
+	// 		if (terminal_index[screen] == 80 * 25)
+	// 			ft_scroll_screen();
+	//         terminal_buffer[screen][terminal_index[screen]] = (unsigned short)str[index] | (unsigned short)color << 8;
+	// 		vga_buffer[terminal_index[screen]] = terminal_buffer[screen][terminal_index[screen]];
+	// 	}
+	// 	terminal_index[screen]++;
+    //     index++;
+	// 	line_size[screen]++;
+    // }
+}
+
 void	print_string(char* str, unsigned char color)
 {
+	if (cursor_index[screen] != terminal_index[screen] && cursor_index[screen] != 5000)
+	{
+		print_shifted(str, color);
+		return;
+	}
     int index = 0;
     while (str[index])
     {
@@ -92,24 +182,38 @@ void	print_char(char str, unsigned char color)
     terminal_index[screen]++;
 }
 
+void	ft_goback()
+{
+	if (cursor_index[screen] == 5000)
+		cursor_index[screen] = terminal_index[screen];
+	// if (cursor_index[screen] % 80 != 0)
+	// {
+	if (line_size[screen] <= 80 - 8 && cursor_index[screen] % 80 <= 8)
+	return ;
+	cursor_index[screen]--;
+	print_debug("CA MARCHE", WHITE);
+	// }
+	// else if (cursor_index[screen] % 80 )
+}
+
 void	ft_backspace()
 {
-	if (terminal_index[screen] % 80 != 0)
-	{
+	// if (terminal_index[screen] % 80 != 0)
+	// {
 		if (line_size[screen] <= 80 - 8 && terminal_index[screen] % 80 <= 8)
 			return ;
 		terminal_index[screen]--;
 		terminal_buffer[screen][terminal_index[screen]] = ' ';
 		vga_buffer[terminal_index[screen]] = (unsigned short)' ' | (unsigned short)WHITE << 8;
 		line_size[screen]--;
-	}
-	else if (terminal_index[screen] % 80 == 0)
-	{
-		terminal_index[screen]--;
-		terminal_buffer[screen][terminal_index[screen]] = ' ';
-		vga_buffer[terminal_index[screen]] = (unsigned short)' ' | (unsigned short)WHITE << 8;
-		line_size[screen]--;
-	}
+	// }
+	// else if (terminal_index[screen] % 80 == 0)
+	// {
+	// 	terminal_index[screen]--;
+	// 	terminal_buffer[screen][terminal_index[screen]] = ' ';
+	// 	vga_buffer[terminal_index[screen]] = (unsigned short)' ' | (unsigned short)WHITE << 8;
+	// 	line_size[screen]--;
+	// }
 }
 
 int	ft_isnewl(const char *str, int i)
