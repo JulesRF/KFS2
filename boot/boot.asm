@@ -10,7 +10,7 @@ global start
 extern main                         ; Main
 
 start:
-    cli                             ; Clear interrupts
+    cli                             ; Disable interrupts
     sti
     xor ebp, ebp
     mov esp, stack_space            ; Stack pointer
