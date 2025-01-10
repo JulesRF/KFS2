@@ -34,6 +34,7 @@ void    interpretor(char *str)
 		print_string("help      print a short builtin man\n", WHITE);
 		print_string("reboot    not implemented yet\n", WHITE);
 		print_string("halt      not implemented yet\n", WHITE);
+		print_string("stack     not implemented yet\n", WHITE);
 	}
 	else if (ft_strcmp(str, "clear") == 0) {
 		// TODO

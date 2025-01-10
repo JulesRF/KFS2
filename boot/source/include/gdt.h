@@ -45,4 +45,19 @@
 #define GDT_ENTRIES	7
 #define FLAG_D_32	0xCF
 
-void    init_descriptor( void );
+struct gdt_entry {
+    uint16 limit_low;  // Lower 16 bits of the limit
+    uint16 base_low;   // Lower 16 bits of the base
+    uint8  base_middle;// Next 8 bits of the base
+    uint8  access;     // Access flags
+    uint8  granularity;// Granularity and flags
+    uint8  base_high;  // Last 8 bits of the base
+} __attribute__((packed));
+
+struct gdt_ptr {
+    uint16 limit;      // Limit of the GDT
+    uint32 base;       // Base address of the first gdt_entry
+} __attribute__((packed));
+
+// void    init_descriptor( void );
+void    init_gdt();

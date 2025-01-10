@@ -12,31 +12,33 @@
 
 #include "include/kfs.h"
 
-void    create_descriptor(uint32 base, uint32 limit, uint16 flag)
-{
-    uint64 descriptor;
- 
-    // Create the high 32 bit segment
-    descriptor  =  limit       & 0xFFFFFFFF;         // set limit bits 19:16
-    descriptor |= (flag <<  8) & 0x00F0FF00;         // set type, p, dpl, s, g, d/b, l and avl fields
-    descriptor |= (base >> 16) & 0x000000FF;         // set base bits 23:16
-    descriptor |=  base        & 0xFF000000;         // set base bits 31:24
- 
-    // Shift by 32 to allow for low part of segment
-    // descriptor <<= 32;
- 
-    // // Create the low 32 bit segment
-    // descriptor |= base  << 16;                       // set base bits 15:0
-    // descriptor |= limit  & 0x0000FFFF;               // set limit bits 15:0
- 
-    // printf("0x%.16llX\n", descriptor);
-}
+struct gdt_entry gdt[3];
+struct gdt_ptr gp;
 
-void    init_descriptor( void ) {
+void init_gdt() {
+    gp.limit = (sizeof(struct gdt_entry) * 3) - 1;
+    gp.base = (uint32)&gdt;
 
-    create_descriptor(0, 0, 0);
-    create_descriptor(0, 0x000FFFFF, (GDT_CODE_PL0));
-    create_descriptor(0, 0x000FFFFF, (GDT_DATA_PL0));
-    create_descriptor(0, 0x000FFFFF, (GDT_CODE_PL3));
-    create_descriptor(0, 0x000FFFFF, (GDT_DATA_PL3));
+    // Null segment
+    gdt[0] = (struct gdt_entry){0, 0, 0, 0, 0, 0};
+
+    // Code segment
+    gdt[1] = (struct gdt_entry){
+        .base_low = 0,
+        .base_middle = 0,
+        .base_high = 0,
+        .limit_low = 0xFFFF,
+        .granularity = 0xCF, // 4K granularity, 32-bit opcodes
+        .access = 0x9A       // Code segment, executable, readable
+    };
+
+    // Data segment
+    gdt[2] = (struct gdt_entry){
+        .base_low = 0,
+        .base_middle = 0,
+        .base_high = 0,
+        .limit_low = 0xFFFF,
+        .granularity = 0xCF, // 4K granularity, 32-bit opcodes
+        .access = 0x92       // Data segment, writable
+    };
 }

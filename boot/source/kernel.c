@@ -3,7 +3,8 @@
 int	main(void)
 {
 	//GDT TABLE INITIALISATION
-	init_descriptor();
+	// init_descriptor();
+	
 
 	//VGA INITIALISATION
 	screen = 0;
