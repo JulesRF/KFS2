@@ -44,3 +44,5 @@
 #define GDT_ADDRESS	0x00000800
 #define GDT_ENTRIES	7
 #define FLAG_D_32	0xCF
+
+void    init_descriptor( void );

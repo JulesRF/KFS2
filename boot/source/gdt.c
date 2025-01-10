@@ -12,9 +12,9 @@
 
 #include "include/kfs.h"
 
-void    create_descriptor(uint32_t base, uint32_t limit, uint16_t flag)
+void    create_descriptor(uint32 base, uint32 limit, uint16 flag)
 {
-    uint64_t descriptor;
+    uint64 descriptor;
  
     // Create the high 32 bit segment
     descriptor  =  limit       & 0xFFFFFFFF;         // set limit bits 19:16
@@ -23,13 +23,13 @@ void    create_descriptor(uint32_t base, uint32_t limit, uint16_t flag)
     descriptor |=  base        & 0xFF000000;         // set base bits 31:24
  
     // Shift by 32 to allow for low part of segment
-    descriptor <<= 32;
+    // descriptor <<= 32;
  
-    // Create the low 32 bit segment
-    descriptor |= base  << 16;                       // set base bits 15:0
-    descriptor |= limit  & 0x0000FFFF;               // set limit bits 15:0
+    // // Create the low 32 bit segment
+    // descriptor |= base  << 16;                       // set base bits 15:0
+    // descriptor |= limit  & 0x0000FFFF;               // set limit bits 15:0
  
-    printf("0x%.16llX\n", descriptor);
+    // printf("0x%.16llX\n", descriptor);
 }
 
 void    init_descriptor( void ) {
