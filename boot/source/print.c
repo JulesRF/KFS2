@@ -75,7 +75,7 @@ void	print_shifted(char *str, unsigned char color)
 		index++;
 	}
 	buffer[index] = '\0';
-	(void)buffer;
+	// (void)buffer;
 
 	//clean command from end to cursor_index
 	// index = terminal_index[screen] - index;
@@ -101,16 +101,16 @@ void	print_shifted(char *str, unsigned char color)
 		terminal_index[screen]++;
 		cursor_index[screen]++;
 	}
-	print_debug(buffer, WHITE);
+	// print_debug(buffer, WHITE);
 
 	//copy the content of buffer into command and vga
 	
-	index = cursor_index[screen];
+	index = ft_strlen(buffer) - (terminal_index[screen] - cursor_index[screen]);
 	while(buffer[index])
 	{
-		current_commands[screen][index] = (unsigned short)buffer[index] | (unsigned short)color << 8;
-		terminal_buffer[screen][index] = (unsigned short)buffer[index] | (unsigned short)color << 8;
-		vga_buffer[index] = terminal_buffer[screen][index];
+		current_commands[screen][cursor_index[screen]] = (unsigned short)buffer[index] | (unsigned short)color << 8;
+		terminal_buffer[screen][cursor_index[screen]] = (unsigned short)buffer[index] | (unsigned short)color << 8;
+		vga_buffer[cursor_index[screen]] = terminal_buffer[screen][cursor_index[screen]];
 		index++;
 		terminal_index[screen]++;
 		cursor_index[screen]++;
