@@ -66,7 +66,8 @@ void	print_shifted(char *str, unsigned char color)
 {
 	char buffer[256];
 	unsigned int index = 0;
-	int jndex = 0;
+	unsigned int jndex = 0;
+	unsigned int kndex = 0;
 
 	// copy command to buffer
 	while (current_commands[screen][index])
@@ -75,46 +76,54 @@ void	print_shifted(char *str, unsigned char color)
 		index++;
 	}
 	buffer[index] = '\0';
-	// (void)buffer;
+	// STRING DE BASE: "salut ca va"
 
-	//clean command from end to cursor_index
-	// index = terminal_index[screen] - index;
-	index = terminal_index[screen];
-	while (index > cursor_index[screen])
+	//clean command from cursor_index to end
+	index = commands_index[screen] - (terminal_index[screen] - cursor_index[screen]); // ex: 5 = 10 - (100 - 95)
+	jndex = cursor_index[screen];																   // ex: 95 = 95
+	while (jndex <= terminal_index[screen])														   // ex: 95 <= 100
 	{
 		current_commands[screen][index] = ' ';
-		terminal_buffer[screen][index] = ' ';
-		vga_buffer[index] = (unsigned short)' ' | (unsigned short)WHITE << 8;
-		index--;
+		terminal_buffer[screen][jndex] = ' ';
+		vga_buffer[jndex] = (unsigned short)' ' | (unsigned short)WHITE << 8;
+		index++;
+		jndex++;
 	}
+	// CURRENT_COMMANDS: "salut "
 
 	//write the added string/character at the cursor index
-	index = cursor_index[screen];
+	index = commands_index[screen] - (terminal_index[screen] - cursor_index[screen]);
 	jndex = 0;
 	while (str[jndex])
 	{
 		current_commands[screen][index] = (unsigned short)str[jndex] | (unsigned short)color << 8;
-		terminal_buffer[screen][index] = (unsigned short)str[jndex] | (unsigned short)color << 8;
-		vga_buffer[index] = terminal_buffer[screen][index];
+		terminal_buffer[screen][cursor_index[screen]] = (unsigned short)str[jndex] | (unsigned short)color << 8;
+		vga_buffer[cursor_index[screen]] = terminal_buffer[screen][cursor_index[screen]];
 		jndex++;
 		index++;
 		terminal_index[screen]++;
+		commands_index[screen]++;
 		cursor_index[screen]++;
 	}
-	// print_debug(buffer, WHITE);
+	// CURRENT_COMMANDS: "salut r"
 
 	//copy the content of buffer into command and vga
 	
-	index = ft_strlen(buffer) - (terminal_index[screen] - cursor_index[screen]);
+	index = commands_index[screen] - (terminal_index[screen] - cursor_index[screen]);
+	jndex = commands_index[screen];
+	kndex = 0;
 	while(buffer[index])
 	{
-		current_commands[screen][cursor_index[screen]] = (unsigned short)buffer[index] | (unsigned short)color << 8;
-		terminal_buffer[screen][cursor_index[screen]] = (unsigned short)buffer[index] | (unsigned short)color << 8;
-		vga_buffer[cursor_index[screen]] = terminal_buffer[screen][cursor_index[screen]];
+		current_commands[screen][index + 1] = (unsigned short)buffer[index] | (unsigned short)color << 8;
+		terminal_buffer[screen][cursor_index[screen] + kndex] = (unsigned short)buffer[index] | (unsigned short)color << 8;
+		vga_buffer[cursor_index[screen] + kndex] = terminal_buffer[screen][cursor_index[screen] + kndex];
 		index++;
+		jndex++;
+		kndex++;
 		terminal_index[screen]++;
-		cursor_index[screen]++;
+		commands_index[screen]++;
 	}
+	print_debug(current_commands[screen], WHITE);
 	// while(buffer[index - jndex])
 	// {
 	// 	current_commands[screen][index] = (unsigned short)buffer[index + jndex] | (unsigned short)color << 8;
@@ -189,9 +198,9 @@ void	ft_goback()
 	// if (cursor_index[screen] % 80 != 0)
 	// {
 	if (line_size[screen] <= 80 - 8 && cursor_index[screen] % 80 <= 8)
-	return ;
+		return ;
 	cursor_index[screen]--;
-	print_debug("CA MARCHE", WHITE);
+	// print_debug("CA MARCHE", WHITE);
 	// }
 	// else if (cursor_index[screen] % 80 )
 }
@@ -200,12 +209,12 @@ void	ft_backspace()
 {
 	// if (terminal_index[screen] % 80 != 0)
 	// {
-		if (line_size[screen] <= 80 - 8 && terminal_index[screen] % 80 <= 8)
-			return ;
-		terminal_index[screen]--;
-		terminal_buffer[screen][terminal_index[screen]] = ' ';
-		vga_buffer[terminal_index[screen]] = (unsigned short)' ' | (unsigned short)WHITE << 8;
-		line_size[screen]--;
+	if (line_size[screen] <= 80 - 8 && terminal_index[screen] % 80 <= 8)
+		return ;
+	terminal_index[screen]--;
+	terminal_buffer[screen][terminal_index[screen]] = ' ';
+	vga_buffer[terminal_index[screen]] = (unsigned short)' ' | (unsigned short)WHITE << 8;
+	line_size[screen]--;
 	// }
 	// else if (terminal_index[screen] % 80 == 0)
 	// {
@@ -348,6 +357,30 @@ void	print_debug(char *str, unsigned char color) {
 		place++;
 	}
 }
+
+void	print_char_debug2(char str, unsigned char color)
+{
+    
+	vga_buffer[346] = (unsigned short)str | (unsigned short)color << 8;
+}
+
+
+void	putnbr_debug2(int nbr, unsigned char color)
+{
+	if (nbr < 0)
+	{
+		print_char_debug('-', WHITE);
+		nbr = nbr * -1;
+	}
+	if (nbr <= 9)
+		print_char_debug(nbr + '0', color);
+	else
+	{
+		putnbr_debug(nbr / 10, color);
+		print_char_debug(nbr % 10 + '0', color);
+	}
+}
+
 
 void	print_char_debug(char str, unsigned char color)
 {
