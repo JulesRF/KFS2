@@ -111,30 +111,37 @@ void	print_letters(uint8 scancode) {
 		{
 			if (commands_index[screen] < SIZE_COMMAND) {
 				
+				if (scancode != 0x1C)
+				{
 				print_string(scancode_shift[scancode], temp_color);
-				if (is_printable(scancode) == 1 && commands_index[screen] < SIZE_COMMAND) {
+				if (is_printable(scancode) == 1 && commands_index[screen] < SIZE_COMMAND)
+				{
 					current_commands[screen][commands_index[screen]] = scancode_shift[scancode][0];
 					commands_index[screen]++;
 				}
 				// print_debug(current_commands, RED);
+				}
 			}
 		}
 		else
 		{
 			if (commands_index[screen] < SIZE_COMMAND) {
-
+				if (scancode != 0x1C)
+				{
 				print_string(scancode_strings[scancode], temp_color);
-				if (is_printable(scancode) == 1 && commands_index[screen] < SIZE_COMMAND) {
-					
-					current_commands[screen][commands_index[screen]] = scancode_strings[scancode][0];
-					commands_index[screen]++;
+				if (is_printable(scancode) == 1 && commands_index[screen] < SIZE_COMMAND)
+				{
+						current_commands[screen][commands_index[screen]] = scancode_strings[scancode][0];
+						commands_index[screen]++;
 				}
 				// print_debug(current_commands, RED);
+				}
 			}
 		}
 		// ENTER HANDLER
 		if (scancode == 0x1C && isCtrlPressed == 0) {
 
+			cursor_index[screen] = 5000;
 			current_commands[screen][commands_index[screen]] = '\0';
 			print_debug(current_commands[screen], RED);
 			interpretor(current_commands[screen]);

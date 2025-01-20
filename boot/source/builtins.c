@@ -30,7 +30,7 @@ void    interpretor(char *str)
 {
     if (ft_strcmp(str, "help") == 0)
 	{
-		print_string("--- HELP ---\n", WHITE);
+		print_string("\n--- HELP ---\n", WHITE);
 		print_string("help      print a short builtin man\n", WHITE);
 		print_string("reboot    not implemented yet\n", WHITE);
 		print_string("halt      not implemented yet\n", WHITE);
@@ -43,7 +43,7 @@ void    interpretor(char *str)
 		// DO NOTHING
 	}
 	else{
-		print_string("command not found: ", WHITE);
+		print_string("\ncommand not found: ", WHITE);
 		print_string(str, WHITE);
 		print_string("\n", WHITE);
 	}

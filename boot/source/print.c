@@ -72,6 +72,8 @@ void	print_shifted(char *str, unsigned char color)
 	// copy command to buffer
 	while (current_commands[screen][index])
 	{
+		if (current_commands[screen][index] == '\n')
+			return ;
 		buffer[index] = current_commands[screen][index];
 		index++;
 	}
@@ -93,14 +95,13 @@ void	print_shifted(char *str, unsigned char color)
 	// 1 CURRENT_COMMANDS: "salut "
 	// ET NON              "salut rc"
 	// 2 CURRENT_COMMANDS: "salut r"
-	// print_debug(current_commands[screen], WHITE);
 
 	//write the added string/character at the cursor index
 	index = commands_index[screen] - (terminal_index[screen] - cursor_index[screen]);
 	jndex = 0;
 	while (str[jndex])
 	{
-		current_commands[screen][index] = (unsigned short)str[jndex] | (unsigned short)color << 8;
+		current_commands[screen][index] = str[jndex];
 		terminal_buffer[screen][cursor_index[screen]] = (unsigned short)str[jndex] | (unsigned short)color << 8;
 		vga_buffer[cursor_index[screen]] = terminal_buffer[screen][cursor_index[screen]];
 		jndex++;
@@ -119,7 +120,7 @@ void	print_shifted(char *str, unsigned char color)
 	kndex = 0;
 	while(buffer[index])
 	{
-		current_commands[screen][index + 1] = (unsigned short)buffer[index] | (unsigned short)color << 8;
+		current_commands[screen][index + 1] = buffer[index];
 		terminal_buffer[screen][cursor_index[screen] + kndex] = (unsigned short)buffer[index] | (unsigned short)color << 8;
 		vga_buffer[cursor_index[screen] + kndex] = terminal_buffer[screen][cursor_index[screen] + kndex];
 		index++;
@@ -128,7 +129,13 @@ void	print_shifted(char *str, unsigned char color)
 		terminal_index[screen]++;
 		commands_index[screen]++;
 	}
-		commands_index[screen]--;
+	while (index <= 257)
+	{
+		current_commands[screen][index + 1] = '\0';
+		index++;
+	}
+	commands_index[screen]--;
+	print_debug(current_commands[screen], WHITE);
 }
 
 void	print_string(char* str, unsigned char color)
