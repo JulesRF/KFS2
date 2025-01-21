@@ -62,7 +62,7 @@ void	ft_scroll_screen()
 	reset_cursor();
 }
 
-void	print_shifted(char *str, unsigned char color)
+void	ft_print_shifted(char *str, unsigned char color)
 {
 	char buffer[256];
 	unsigned int index = 0;
@@ -78,8 +78,6 @@ void	print_shifted(char *str, unsigned char color)
 		index++;
 	}
 	buffer[index] = '\0';
-	// 1 STRING DE BASE: "salut ca va"
-	// 2 STRING DE BASE: "salut rca va"
 
 	//clean command from cursor_index to end
 	index = commands_index[screen] - (terminal_index[screen] - cursor_index[screen]); // ex: 5 = 10 - (100 - 95)
@@ -92,9 +90,6 @@ void	print_shifted(char *str, unsigned char color)
 		index++;
 		jndex++;
 	}
-	// 1 CURRENT_COMMANDS: "salut "
-	// ET NON              "salut rc"
-	// 2 CURRENT_COMMANDS: "salut r"
 
 	//write the added string/character at the cursor index
 	index = commands_index[screen] - (terminal_index[screen] - cursor_index[screen]);
@@ -109,14 +104,12 @@ void	print_shifted(char *str, unsigned char color)
 		terminal_index[screen]++;
 		commands_index[screen]++;
 		cursor_index[screen]++;
+		line_size[screen]++;
 	}
-	// CURRENT_COMMANDS: "salut r"
-	// BUFFER + INDEX = "ca va"
 
 	//copy the content of buffer into command and vga
-	
 	index = commands_index[screen] - (terminal_index[screen] - cursor_index[screen] + jndex);
-	jndex = commands_index[screen];
+	// jndex = commands_index[screen];
 	kndex = 0;
 	while(buffer[index])
 	{
@@ -124,7 +117,7 @@ void	print_shifted(char *str, unsigned char color)
 		terminal_buffer[screen][cursor_index[screen] + kndex] = (unsigned short)buffer[index] | (unsigned short)color << 8;
 		vga_buffer[cursor_index[screen] + kndex] = terminal_buffer[screen][cursor_index[screen] + kndex];
 		index++;
-		jndex++;
+		// jndex++;
 		kndex++;
 		terminal_index[screen]++;
 		commands_index[screen]++;
@@ -135,16 +128,19 @@ void	print_shifted(char *str, unsigned char color)
 		index++;
 	}
 	commands_index[screen]--;
-	print_debug(current_commands[screen], WHITE);
+	// print_debug(current_commands[screen], WHITE);
 }
 
 void	print_string(char* str, unsigned char color)
 {
-	if (cursor_index[screen] != terminal_index[screen] && cursor_index[screen] != 5000)
+	if ((cursor_index[screen] != terminal_index[screen]) && cursor_index[screen] != 5000)
 	{
-		print_shifted(str, color);
+		// print_debug("cursor_index[screen] != terminal_index[screen]", WHITE);
+		ft_print_shifted(str, color);
 		return;
 	}
+	else if (cursor_index[screen] == terminal_index[screen])
+		cursor_index[screen] = 5000;
     int index = 0;
     while (str[index])
     {
@@ -189,10 +185,86 @@ void	ft_goback()
 	// else if (cursor_index[screen] % 80 )
 }
 
+void	ft_goforward()
+{
+	if (cursor_index[screen] == 5000)
+		cursor_index[screen] = terminal_index[screen];
+	if (((cursor_index[screen] + 1 ) > terminal_index[screen]) && cursor_index[screen] != 5000)
+		return ;
+	cursor_index[screen]++;
+}
+
+void	ft_back_shift()
+{
+	char buffer[256];
+	unsigned int index = 0;
+	unsigned int jndex = 0;
+	unsigned int kndex = 0;
+
+	// copy command to buffer
+	while (current_commands[screen][index])
+	{
+		if (current_commands[screen][index] == '\n')
+			return ;
+		buffer[index] = current_commands[screen][index];
+		index++;
+	}
+	buffer[index] = '\0';
+
+	//clean command from cursor_index to end
+	index = commands_index[screen] - (terminal_index[screen] - cursor_index[screen]); // ex: 5 = 10 - (100 - 95)
+	jndex = cursor_index[screen];													  // ex: 95 = 95
+	while (jndex <= terminal_index[screen])											  // ex: 95 <= 100
+	{
+		current_commands[screen][index] = ' ';
+		terminal_buffer[screen][jndex] = ' ';
+		vga_buffer[jndex] = (unsigned short)' ' | (unsigned short)WHITE << 8;
+		index++;
+		jndex++;
+	}
+
+	//delete the character on the cursor and move back the cursor
+	index = commands_index[screen] - (terminal_index[screen] - cursor_index[screen]);
+	current_commands[screen][index - 1] = ' ';
+	cursor_index[screen]--;
+	terminal_buffer[screen][cursor_index[screen]] = ' ';
+	vga_buffer[cursor_index[screen]] = (unsigned short)' ' | (unsigned short)WHITE << 8;
+	terminal_index[screen]--;
+	line_size[screen]--;
+
+	kndex = 0;
+	// index--;
+	while(buffer[index])
+	{
+		current_commands[screen][index - 1] = buffer[index];
+		terminal_buffer[screen][cursor_index[screen] + kndex] = (unsigned short)buffer[index] | (unsigned short)WHITE << 8;
+		vga_buffer[cursor_index[screen] + kndex] = terminal_buffer[screen][cursor_index[screen] + kndex];
+		index++;
+		kndex++;
+		// terminal_index[screen]++;
+		// commands_index[screen]++;
+	}
+	while (index <= 257)
+	{
+		current_commands[screen][index + 1] = '\0';
+		index++;
+	}
+	// commands_index[screen]++;
+	print_debug(current_commands[screen], WHITE);
+}
+
 void	ft_backspace()
 {
 	// if (terminal_index[screen] % 80 != 0)
 	// {
+	if ((cursor_index[screen] != terminal_index[screen]) && cursor_index[screen] != 5000)
+	{
+		// print_debug("cursor_index[screen] != terminal_index[screen]", WHITE);
+		ft_back_shift();
+		return;
+	}
+	else if (cursor_index[screen] == terminal_index[screen])
+		cursor_index[screen] = 5000;
 	if (line_size[screen] <= 80 - 8 && terminal_index[screen] % 80 <= 8)
 		return ;
 	terminal_index[screen]--;

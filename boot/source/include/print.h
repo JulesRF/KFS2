@@ -36,6 +36,7 @@ void	ft_switch_screen();
 void    print_string(char* str, unsigned char color);
 void    print_char(char str, unsigned char color);
 void	ft_goback();
+void	ft_goforward();
 void	ft_backspace();
 int     ft_isnewl(const char *str, int i);
 void	ft_prompt();
