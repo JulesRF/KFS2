@@ -201,6 +201,9 @@ void	ft_back_shift()
 	unsigned int jndex = 0;
 	unsigned int kndex = 0;
 
+	// 1string de base: "salut ca va?
+	// 2string de base: "salut a va?"
+	print_debug(current_commands[screen], WHITE);
 	// copy command to buffer
 	while (current_commands[screen][index])
 	{
@@ -209,6 +212,7 @@ void	ft_back_shift()
 		buffer[index] = current_commands[screen][index];
 		index++;
 	}
+	//CURRENT_COMMANDS: "salut ca va?"
 	buffer[index] = '\0';
 
 	//clean command from cursor_index to end
@@ -222,6 +226,7 @@ void	ft_back_shift()
 		index++;
 		jndex++;
 	}
+	//CURRENT_COMMANDS: "salut c"
 
 	//delete the character on the cursor and move back the cursor
 	index = commands_index[screen] - (terminal_index[screen] - cursor_index[screen]);
@@ -229,9 +234,11 @@ void	ft_back_shift()
 	cursor_index[screen]--;
 	terminal_buffer[screen][cursor_index[screen]] = ' ';
 	vga_buffer[cursor_index[screen]] = (unsigned short)' ' | (unsigned short)WHITE << 8;
-	terminal_index[screen]--;
+	// terminal_index[screen]--;
 	line_size[screen]--;
+	//CURRENT_COMMANDS: "salut "
 
+	//copy the content of buffer into command and vga
 	kndex = 0;
 	// index--;
 	while(buffer[index])
@@ -249,8 +256,8 @@ void	ft_back_shift()
 		current_commands[screen][index + 1] = '\0';
 		index++;
 	}
-	// commands_index[screen]++;
-	print_debug(current_commands[screen], WHITE);
+	//CURRENT_COMMANDS: "salut a va"
+	// commands_index[screen]--;
 }
 
 void	ft_backspace()
@@ -259,7 +266,6 @@ void	ft_backspace()
 	// {
 	if ((cursor_index[screen] != terminal_index[screen]) && cursor_index[screen] != 5000)
 	{
-		// print_debug("cursor_index[screen] != terminal_index[screen]", WHITE);
 		ft_back_shift();
 		return;
 	}
