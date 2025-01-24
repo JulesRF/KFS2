@@ -203,7 +203,7 @@ void	ft_back_shift()
 
 	// 1string de base: "salut ca va?
 	// 2string de base: "salut a va?"
-	print_debug(current_commands[screen], WHITE);
+	
 	// copy command to buffer
 	while (current_commands[screen][index])
 	{
@@ -253,11 +253,13 @@ void	ft_back_shift()
 	}
 	while (index <= 257)
 	{
-		current_commands[screen][index + 1] = '\0';
+		current_commands[screen][index - 1] = '\0';
 		index++;
 	}
+	print_debug("                                      ", WHITE);
+	print_debug(current_commands[screen], WHITE);
 	//CURRENT_COMMANDS: "salut a va"
-	// commands_index[screen]--;
+	// commands_index[screen]++;
 }
 
 void	ft_backspace()
