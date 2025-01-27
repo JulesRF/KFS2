@@ -122,9 +122,13 @@ void	ft_print_shifted(char *str, unsigned char color)
 		terminal_index[screen]++;
 		commands_index[screen]++;
 	}
+	kndex++;
 	while (index <= 257)
 	{
 		current_commands[screen][index + 1] = '\0';
+		terminal_buffer[screen][cursor_index[screen] + kndex] = '\0';
+		vga_buffer[cursor_index[screen] + kndex] = terminal_buffer[screen][cursor_index[screen] + kndex];
+		kndex++;
 		index++;
 	}
 	commands_index[screen]--;
@@ -191,6 +195,8 @@ void	ft_goforward()
 		cursor_index[screen] = terminal_index[screen];
 	if (((cursor_index[screen] + 1 ) > terminal_index[screen]) && cursor_index[screen] != 5000)
 		return ;
+	if (terminal_buffer[screen][cursor_index[screen] + 1] == '\0')
+		return ;
 	cursor_index[screen]++;
 }
 
@@ -237,6 +243,8 @@ void	ft_back_shift()
 	// terminal_index[screen]--;
 	line_size[screen]--;
 	//CURRENT_COMMANDS: "salut "
+	// print_debug("                                      ", WHITE);
+	// print_debug(current_commands[screen], WHITE);
 
 	//copy the content of buffer into command and vga
 	kndex = 0;
@@ -251,15 +259,17 @@ void	ft_back_shift()
 		// terminal_index[screen]++;
 		// commands_index[screen]++;
 	}
+	kndex++;
 	while (index <= 257)
 	{
 		current_commands[screen][index - 1] = '\0';
+		terminal_buffer[screen][cursor_index[screen] + kndex] = '\0';
+		vga_buffer[cursor_index[screen] + kndex] = terminal_buffer[screen][cursor_index[screen] + kndex];
+		kndex++;
 		index++;
 	}
-	print_debug("                                      ", WHITE);
-	print_debug(current_commands[screen], WHITE);
 	//CURRENT_COMMANDS: "salut a va"
-	// commands_index[screen]++;
+	// commands_index[screen]--;
 }
 
 void	ft_backspace()
@@ -268,7 +278,10 @@ void	ft_backspace()
 	// {
 	if ((cursor_index[screen] != terminal_index[screen]) && cursor_index[screen] != 5000)
 	{
+		if (cursor_index[screen] <= (terminal_index[screen] - commands_index[screen]))
+			return ;
 		ft_back_shift();
+		// commands_index[screen]--;
 		return;
 	}
 	else if (cursor_index[screen] == terminal_index[screen])

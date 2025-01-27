@@ -112,7 +112,7 @@ void	print_letters(uint8 scancode) {
 		{
 			if (commands_index[screen] < SIZE_COMMAND) {
 				
-				if (scancode != 0x1C)
+				if (scancode != 0x1C && scancode != 0x0E)
 				{
 					print_string(scancode_shift[scancode], temp_color);
 					if (is_printable(scancode) == 1 && commands_index[screen] < SIZE_COMMAND)
@@ -127,7 +127,7 @@ void	print_letters(uint8 scancode) {
 		else
 		{
 			if (commands_index[screen] < SIZE_COMMAND) {
-				if (scancode != 0x1C)
+				if (scancode != 0x1C && scancode != 0x0E)
 				{
 					print_string(scancode_strings[scancode], temp_color);
 					if (is_printable(scancode) == 1 && commands_index[screen] < SIZE_COMMAND)
