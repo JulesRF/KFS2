@@ -50,5 +50,6 @@ void	print_status( void );
 void	print_char_debug(char str, unsigned char color);
 void	print_debug(char *str, unsigned char color);
 void	putnbr_debug(int nbr, unsigned char color);
+char	*ft_itoa(int n);
 
 #endif

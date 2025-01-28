@@ -177,7 +177,7 @@ void	print_char(char str, unsigned char color)
 
 void	ft_goback()
 {
-	if (cursor_index[screen] == 5000)
+	if (cursor_index[screen] >= 5000)
 		cursor_index[screen] = terminal_index[screen];
 	// if (cursor_index[screen] % 80 != 0)
 	// {
@@ -479,6 +479,63 @@ void	putnbr_debug(int nbr, unsigned char color)
 		putnbr_debug(nbr / 10, color);
 		print_char_debug(nbr % 10 + '0', color);
 	}
+}
+
+static int	ft_count(int n)
+{
+	int	count;
+
+	count = 1;
+	while (n >= 10)
+	{
+		n = n / 10;
+		count++;
+	}
+	return (count);
+}
+
+static char	*ft_rev(char *str, int size, int moins, int i)
+{
+	int		j;
+	char	temp;
+
+	if (moins == 1)
+		str[i] = 45;
+	i = 0;
+	j = size - 1;
+	while (i < j)
+	{
+		temp = str[i];
+		str[i] = str[j];
+		str[j] = temp;
+		i++;
+		j--;
+	}
+	str[size] = '\0';
+	return (str);
+}
+
+char	*ft_itoa(int n)
+{
+	char	dest[256];
+	int		size;
+	int		i;
+	int		moins;
+
+	i = 0;
+	moins = 0;
+	if (n < 0)
+	{
+		moins = 1;
+		n = n * -1;
+	}
+	size = ft_count(n) + moins;
+	while (i < size - moins)
+	{
+		dest[i++] = n % 10 + 48;
+		n = n / 10;
+	}
+	return (ft_rev(dest, size, moins, i));
 }
 
 // pitie laisse moi push

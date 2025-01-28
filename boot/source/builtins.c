@@ -26,6 +26,13 @@ int		ft_is_only_space(char *str) {
 	return (0);
 }
 
+int		ft_is_nl(char *str)
+{
+	if (ft_strlen(str) == 0)
+		return (0);
+	return (1);
+}
+
 void    interpretor(char *str)
 {
     if (ft_strcmp(str, "help") == 0)
@@ -39,9 +46,10 @@ void    interpretor(char *str)
 	else if (ft_strcmp(str, "clear") == 0) {
 		// TODO
 	}
-	else if (ft_is_only_space(str) == 0) {
-		// DO NOTHING
-	}
+	else if (ft_is_nl(str) == 0)
+		print_string("\n", WHITE);
+	else if (ft_is_only_space(str) == 0)
+		print_string("\n", WHITE);
 	else{
 		print_string("\ncommand not found: ", WHITE);
 		print_string(str, WHITE);

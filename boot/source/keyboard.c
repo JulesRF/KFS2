@@ -41,6 +41,15 @@ void	clean_command_buffer() {
 		current_commands[screen][i] = '\0';
 }
 
+void ft_update_tindex(void)
+{
+	int i = cursor_index[screen];
+
+	while (terminal_buffer[screen][i] != '\0')
+		i++;
+	terminal_index[screen] = i - 1;
+}
+
 uint8	keyboard_read_input() {
 
 	while(!(inb(0x64) & 1));
@@ -145,6 +154,8 @@ void	print_letters(uint8 scancode) {
 			cursor_index[screen] = 5000;
 			current_commands[screen][commands_index[screen]] = '\0';
 			print_debug(current_commands[screen], RED);
+			// ft_update_tindex();
+			// print_debug(ft_itoa(terminal_index[screen]), WHITE);
 			interpretor(current_commands[screen]);
 			clean_command_buffer();
 			commands_index[screen] = 0;
