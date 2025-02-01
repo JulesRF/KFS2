@@ -123,9 +123,10 @@ void	ft_print_shifted(char *str, unsigned char color)
 		commands_index[screen]++;
 	}
 	kndex++;
-	while (index <= 257)
+	while (index <= 5000)
 	{
-		current_commands[screen][index + 1] = '\0';
+		if (index <= 257)
+			current_commands[screen][index + 1] = '\0';
 		terminal_buffer[screen][cursor_index[screen] + kndex] = '\0';
 		vga_buffer[cursor_index[screen] + kndex] = terminal_buffer[screen][cursor_index[screen] + kndex];
 		kndex++;
@@ -260,9 +261,10 @@ void	ft_back_shift()
 		// commands_index[screen]++;
 	}
 	kndex++;
-	while (index <= 257)
+	while (index <= 5000)
 	{
-		current_commands[screen][index - 1] = '\0';
+		if (index <= 256)
+			current_commands[screen][index - 1] = '\0';
 		terminal_buffer[screen][cursor_index[screen] + kndex] = '\0';
 		vga_buffer[cursor_index[screen] + kndex] = terminal_buffer[screen][cursor_index[screen] + kndex];
 		kndex++;
