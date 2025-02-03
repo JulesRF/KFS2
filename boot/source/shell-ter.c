@@ -24,9 +24,15 @@ void    modify_cursor_position( uint16 pos ) {
 void	reset_cursor( void )
 {
 	vga_buffer[terminal_index[screen]] = (unsigned short)' ' | (unsigned short)WHITE << 8;
-	vga_buffer[terminal_index[screen] + 1] = (unsigned short)' ' | (unsigned short)WHITE << 8;
-	uint16 tmp_pos = terminal_index[screen] + 1;
-	modify_cursor_position(tmp_pos - 1);
+	// vga_buffer[terminal_index[screen] + 1] = (unsigned short)' ' | (unsigned short)WHITE << 8;
+	// uint16 tmp_pos = terminal_index[screen] + 1;
+    uint16 tmp_pos;
+    if (cursor_index[screen] == 5000)
+    	tmp_pos = terminal_index[screen];
+    else
+        tmp_pos = cursor_index[screen];
+	// modify_cursor_position(tmp_pos - 1);
+    modify_cursor_position(tmp_pos);
 	print_status();
 }
 

@@ -86,7 +86,7 @@ void	print_letters(uint8 scancode) {
 			ft_backspace();
 			if (commands_index[screen] > 0 && !((cursor_index[screen] != terminal_index[screen]) && cursor_index[screen] != 5000))
 			{
-				print_debug("Devrai pas etre la", WHITE);
+				// print_debug("Devrai pas etre la", WHITE);
 				current_commands[screen][commands_index[screen] - 1] = ' ';
 				commands_index[screen]--;
 				if (commands_index[screen] == 0)
@@ -105,6 +105,7 @@ void	print_letters(uint8 scancode) {
 		// CTRL SHORTCUTS HANDLER
 		if (isCtrlPressed == 1) {
 
+			// CTRL + L HANDLER
 			if (scancode == 0x26) {
 
 				clear_screen(100);
@@ -146,6 +147,8 @@ void	print_letters(uint8 scancode) {
 							current_commands[screen][commands_index[screen]] = scancode_strings[scancode][0];
 							commands_index[screen]++;
 					}
+					// else
+						// print_debug("PROBLEME", RED);
 					// print_debug(current_commands, RED);
 				}
 			}

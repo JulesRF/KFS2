@@ -192,12 +192,18 @@ void	ft_goback()
 
 void	ft_goforward()
 {
-	if (cursor_index[screen] == 5000)
+	if (cursor_index[screen] >= 5000)
 		cursor_index[screen] = terminal_index[screen];
 	if (((cursor_index[screen] + 1 ) > terminal_index[screen]) && cursor_index[screen] != 5000)
+	{
+		print_debug("LA", BLUE);
 		return ;
-	if (terminal_buffer[screen][cursor_index[screen] + 1] == '\0')
-		return ;
+	}
+	// if (terminal_buffer[screen][cursor_index[screen] + 1] == '\0')
+	// {
+	// 	print_debug("ICI", RED);
+	// 	return ;
+	// }
 	cursor_index[screen]++;
 }
 
