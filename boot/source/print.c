@@ -96,6 +96,11 @@ void	ft_print_shifted(char *str, unsigned char color)
 	jndex = 0;
 	while (str[jndex])
 	{
+		if (cursor_index[screen] + kndex >= 80 * 25)
+		{
+			ft_scroll_screen();
+			cursor_index[screen] -= 80;
+		}
 		current_commands[screen][index] = str[jndex];
 		terminal_buffer[screen][cursor_index[screen]] = (unsigned short)str[jndex] | (unsigned short)color << 8;
 		vga_buffer[cursor_index[screen]] = terminal_buffer[screen][cursor_index[screen]];
@@ -113,6 +118,11 @@ void	ft_print_shifted(char *str, unsigned char color)
 	kndex = 0;
 	while(buffer[index])
 	{
+		if (cursor_index[screen] + kndex >= 80 * 25)
+		{
+			ft_scroll_screen();
+			cursor_index[screen] -= 80;
+		}
 		current_commands[screen][index + 1] = buffer[index];
 		terminal_buffer[screen][cursor_index[screen] + kndex] = (unsigned short)buffer[index] | (unsigned short)color << 8;
 		vga_buffer[cursor_index[screen] + kndex] = terminal_buffer[screen][cursor_index[screen] + kndex];
@@ -140,7 +150,7 @@ void	print_string(char* str, unsigned char color)
 {
 	if ((cursor_index[screen] != terminal_index[screen]) && cursor_index[screen] != 5000)
 	{
-		// print_debug("cursor_index[screen] != terminal_index[screen]", WHITE);
+		// print_debug("PRINT SHIFTED", WHITE);
 		ft_print_shifted(str, color);
 		return;
 	}

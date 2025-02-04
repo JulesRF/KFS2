@@ -113,6 +113,8 @@ void	print_letters(uint8 scancode) {
 				ft_prompt();
 				reset_cursor();
 				print_string(current_commands[screen], WHITE);
+				cursor_index[screen] = 5000;
+				commands_index[screen] = ft_strlen(current_commands[screen]);
 			}
 			// TODO faire le ctrl + backspace pour retirer un mot entier
 			if (scancode == 0x0E) {
