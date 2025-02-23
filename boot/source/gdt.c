@@ -3,42 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   gdt.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rdel-agu <rdel-agu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: qvy <qvy@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 13:22:18 by rdel-agu          #+#    #+#             */
-/*   Updated: 2024/12/12 13:22:19 by rdel-agu         ###   ########.fr       */
+/*   Updated: 2025/02/23 18:45:24 by qvy              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "include/kfs.h"
+#include "include/gdt.h"
 
-struct gdt_entry gdt[3];
-struct gdt_ptr gp;
+// Define the actual GDT with 6 entries + 1 NULL entry
+struct gdt_entry gdt[] = {
+    {0, 0, 0, 0, 0, 0},                 // Null Descriptor (must be present)
+    {0xFFFF, 0, 0, 0x9A, 0xCF, 0},      // Kernel Code Segment (0x08)
+    {0xFFFF, 0, 0, 0x92, 0xCF, 0},      // Kernel Data Segment (0x10)
+    {0xFFFF, 0, 0, 0x96, 0xCF, 0},      // Kernel Stack Segment (0x18)
+    {0xFFFF, 0, 0, 0xFA, 0xCF, 0},      // User Code Segment (0x20)
+    {0xFFFF, 0, 0, 0xF2, 0xCF, 0},      // User Data Segment (0x28)
+    {0xFFFF, 0, 0, 0xF6, 0xCF, 0},      // User Stack Segment (0x30)
+};
 
+// Now that `gdt` is defined, we can declare `gp`
+struct gdt_ptr gp = {
+    sizeof(gdt) - 1,                     // GDT size (number of bytes - 1)
+    (uint32)(unsigned long)&gdt        // ✅ Proper casting to prevent warnings
+};
+
+// Assembly function to load the GDT (declared in boot.asm)
+extern void load_gdt(struct gdt_ptr*);
+
+// Function to initialize and load the GDT
 void init_gdt() {
-    gp.limit = (sizeof(struct gdt_entry) * 3) - 1;
-    gp.base = (uint32)&gdt;
-
-    // Null segment
-    gdt[0] = (struct gdt_entry){0, 0, 0, 0, 0, 0};
-
-    // Code segment
-    gdt[1] = (struct gdt_entry){
-        .base_low = 0,
-        .base_middle = 0,
-        .base_high = 0,
-        .limit_low = 0xFFFF,
-        .granularity = 0xCF, // 4K granularity, 32-bit opcodes
-        .access = 0x9A       // Code segment, executable, readable
-    };
-
-    // Data segment
-    gdt[2] = (struct gdt_entry){
-        .base_low = 0,
-        .base_middle = 0,
-        .base_high = 0,
-        .limit_low = 0xFFFF,
-        .granularity = 0xCF, // 4K granularity, 32-bit opcodes
-        .access = 0x92       // Data segment, writable
-    };
+    load_gdt(&gp);  // Load the new GDT
 }

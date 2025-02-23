@@ -7,21 +7,33 @@ section .multiboot
 
 section .text
 global start
-extern main                         ; Main
+extern main                         ; Main function (from C code)
+extern gp                           ; GDT pointer declared in C
+
+global load_gdt     ; Export the function for use in C
+
+load_gdt:
+    mov eax, [esp+4]  ; Load the GDT pointer (argument from C)
+    lgdt [eax]        ; Load the new GDT
+    ret               ; Return to the caller (C function)
 
 start:
     cli                             ; Disable interrupts
-    sti
+
+    lgdt [gp]                       ; Load the Global Descriptor Table
+
+    sti                             ; Re-enable interrupts
     xor ebp, ebp
-    mov esp, stack_space            ; Stack pointer
+    mov esp, stack_space            ; Set up stack
+
     push ebx
-    call main                       ; Main call
-    jmp .1
-.1:
+    call main                       ; Call kernel main function
+
+    jmp .halt                       ; Halt CPU
+.halt:
     hlt
-    ; hlt                           ; Halt CPU
+    jmp .halt
 
 section .bss
-    ; resb 8192                     ; stack size : 8KB
-    resb 4096                       ; stack size : 4KB
+    resb 4096                       ; Stack size: 4KB
 stack_space:
