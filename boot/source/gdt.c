@@ -26,7 +26,7 @@ struct gdt_entry gdt[] = {
 // Now that `gdt` is defined, we can declare `gp`
 struct gdt_ptr gp = {
     sizeof(gdt) - 1,                     // GDT size (number of bytes - 1)
-    (uint32)(unsigned long)&gdt        // ✅ Proper casting to prevent warnings
+    (uint32)(unsigned long)&gdt
 };
 
 // Assembly function to load the GDT (declared in boot.asm)
