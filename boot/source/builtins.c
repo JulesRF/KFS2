@@ -33,6 +33,21 @@ int		ft_is_nl(char *str)
 	return (1);
 }
 
+void halt()
+{
+	asm volatile ("cli");
+	asm volatile ("hlt");
+}
+
+void reboot()
+{
+    uint8 good = 0x02;
+    while (good & 0x02)
+        good = inb(0x64);
+    outb(0x64, 0xFE);
+    halt();
+}
+
 void    interpretor(char *str)
 {
     if (ft_strcmp(str, "help") == 0)
@@ -40,11 +55,17 @@ void    interpretor(char *str)
 		print_string("\n--- HELP ---\n", WHITE);
 		print_string("help      print a short builtin man\n", WHITE);
 		print_string("reboot    not implemented yet\n", WHITE);
-		print_string("halt      not implemented yet\n", WHITE);
+		print_string("halt      Stops \n", WHITE);
 		print_string("stack     not implemented yet\n", WHITE);
 	}
 	else if (ft_strcmp(str, "clear") == 0) {
 		// TODO
+	}
+	else if (ft_strcmp(str, "halt") == 0) {
+		halt();
+	}
+	else if (ft_strcmp(str, "reboot") == 0) {
+		reboot();
 	}
 	else if (ft_is_nl(str) == 0)
 		print_string("\n", WHITE);

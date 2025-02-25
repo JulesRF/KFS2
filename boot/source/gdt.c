@@ -12,7 +12,7 @@
 
 #include "include/gdt.h"
 
-// Define the actual GDT with 6 entries + 1 NULL entry
+// Define GDT with 6 entries + 1 NULL entry
 struct gdt_entry gdt[] = {
     {0, 0, 0, 0, 0, 0},                 // Null Descriptor (must be present)
     {0xFFFF, 0, 0, 0x9A, 0xCF, 0},      // Kernel Code Segment (0x08)
@@ -22,17 +22,16 @@ struct gdt_entry gdt[] = {
     {0xFFFF, 0, 0, 0xF2, 0xCF, 0},      // User Data Segment (0x28)
     {0xFFFF, 0, 0, 0xF6, 0xCF, 0},      // User Stack Segment (0x30)
 };
-
-// Now that `gdt` is defined, we can declare `gp`
+ 
 struct gdt_ptr gp = {
-    sizeof(gdt) - 1,                     // GDT size (number of bytes - 1)
+    sizeof(gdt) - 1,                    // GDT size (number of bytes - 1)
     (uint32)(unsigned long)&gdt
 };
 
-// Assembly function to load the GDT (declared in boot.asm)
+// Assembly function to load the GDT declared in boot.asm
 extern void load_gdt(struct gdt_ptr*);
 
 // Function to initialize and load the GDT
 void init_gdt() {
-    load_gdt(&gp);  // Load the new GDT
+    load_gdt(&gp);
 }
