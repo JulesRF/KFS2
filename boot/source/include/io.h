@@ -23,5 +23,6 @@ typedef unsigned long   uint64;
 
 uint8           inb(uint16 port);
 void            outb(uint16 port, uint8 value);
+void	        outw(uint16 port, uint16 value);
 
 #endif

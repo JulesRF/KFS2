@@ -48,15 +48,21 @@ void reboot()
     halt();
 }
 
+void poweroff()
+{
+	outw(0x604, 0x2000);
+}
+
 void    interpretor(char *str)
 {
     if (ft_strcmp(str, "help") == 0)
 	{
 		print_string("\n--- HELP ---\n", WHITE);
 		print_string("help      print a short builtin man\n", WHITE);
-		print_string("reboot    not implemented yet\n", WHITE);
-		print_string("halt      Stops \n", WHITE);
+		print_string("reboot    Reboots the kernel\n", WHITE);
+		print_string("halt      Stops CPU processes\n", WHITE);
 		print_string("stack     not implemented yet\n", WHITE);
+		print_string("clear     clears the screen (same as CTRL + L)\n", WHITE);
 	}
 	else if (ft_strcmp(str, "clear") == 0) {
 		// TODO
@@ -66,6 +72,9 @@ void    interpretor(char *str)
 	}
 	else if (ft_strcmp(str, "reboot") == 0) {
 		reboot();
+	}
+	else if (ft_strcmp(str, "poweroff") == 0) {
+		poweroff();
 	}
 	else if (ft_is_nl(str) == 0)
 		print_string("\n", WHITE);
