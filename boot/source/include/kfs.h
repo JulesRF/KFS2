@@ -12,15 +12,14 @@
 
 #ifndef KFS_H
 # define KFS_H
+# define NULL 0
 
-# include   "io.h"
+# include	"io.h"
 # include	"print.h"
 # include	"lib.h"
 # include	"shell-ter.h"
 # include   "keyboard.h"
 # include   "gdt.h"
 # include   "builtins.h"
-
-# define	NULL 0
 
 #endif

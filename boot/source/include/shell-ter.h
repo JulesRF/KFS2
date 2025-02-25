@@ -13,9 +13,8 @@
 #ifndef SHELL_TER_H
 # define SHELL_TER_H
 
-void    shell_ter( void );
-void    modify_cursor_position( uint16 pos );
-void	reset_cursor();
-
+void	shell_ter(void);
+void	modify_cursor_position(uint16 pos);
+void	reset_cursor(void);
 
 #endif

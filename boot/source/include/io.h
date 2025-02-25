@@ -16,13 +16,17 @@
 
 # include "kfs.h"
 
-typedef unsigned char   uint8;
-typedef unsigned short  uint16;
-typedef unsigned int    uint32;
-typedef unsigned long   uint64;
+typedef unsigned char	uint8;
+typedef unsigned short	uint16;
+typedef unsigned int	uint32;
+typedef unsigned long	uint64;
 
-uint8           inb(uint16 port);
-void            outb(uint16 port, uint8 value);
-void	        outw(uint16 port, uint16 value);
+uint8	inb(uint16 port);
+void	outb(uint16 port, uint8 value);
+void	outw(uint16 port, uint16 value);
+
+void	halt(void);
+void	reboot(void);
+void	poweroff(void);
 
 #endif

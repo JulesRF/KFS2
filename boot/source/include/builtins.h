@@ -13,6 +13,6 @@
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
-void    interpretor(char *str);
+void	interpretor(char *str);
 
 #endif

@@ -29,3 +29,23 @@ void	outw(uint16 port, uint16 value) {
 
 	asm volatile ("outw %0, %1" :: "a" (value), "Nd" (port));
 }
+
+void halt()
+{
+	asm volatile ("cli");
+	asm volatile ("hlt");
+}
+
+void reboot()
+{
+    uint8 good = 0x02;
+    while (good & 0x02)
+        good = inb(0x64);
+    outb(0x64, 0xFE);
+    halt();
+}
+
+void poweroff()
+{
+	outw(0x604, 0x2000);
+}

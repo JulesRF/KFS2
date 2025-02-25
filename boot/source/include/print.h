@@ -31,22 +31,22 @@ extern uint32	vga_index;
 extern uint32	screen;
 extern uint32	line_size[2];
 
-void    clear_screen(int screen);
-void	ft_switch_screen();
-void    print_string(char* str, unsigned char color);
-void    print_char(char str, unsigned char color);
-void	ft_goback();
-void	ft_goforward();
-void	ft_backspace();
-int     ft_isnewl(const char *str, int i);
-void	ft_prompt();
+void	clear_screen(int screen);
+void	ft_switch_screen(void);
+void	print_string(char *str, unsigned char color);
+void	print_char(char str, unsigned char color);
+void	ft_goback(void);
+void	ft_goforward(void);
+void	ft_backspace(void);
+int		ft_isnewl(const char *str, int i);
+void	ft_prompt(void);
 void	ft_putnbr_hex(int nbr, unsigned char color);
 void	ft_putnbr(int nbr, unsigned char color);
-void    ft_printerr(char *str);
-void	ft_ctrl_backspace();
-void    *ft_memset(void *b, int c, uint16 len);
-void	print_status( void );
-////    DEBUG
+void	ft_printerr(char *str);
+void	ft_ctrl_backspace(void);
+void	*ft_memset(void *b, int c, uint16 len);
+void	print_status(void);
+////	DEBUG
 void	print_char_debug(char str, unsigned char color);
 void	print_debug(char *str, unsigned char color);
 void	putnbr_debug(int nbr, unsigned char color);

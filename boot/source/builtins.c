@@ -33,25 +33,6 @@ int		ft_is_nl(char *str)
 	return (1);
 }
 
-void halt()
-{
-	asm volatile ("cli");
-	asm volatile ("hlt");
-}
-
-void reboot()
-{
-    uint8 good = 0x02;
-    while (good & 0x02)
-        good = inb(0x64);
-    outb(0x64, 0xFE);
-    halt();
-}
-
-void poweroff()
-{
-	outw(0x604, 0x2000);
-}
 
 void    interpretor(char *str)
 {
