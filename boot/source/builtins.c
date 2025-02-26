@@ -12,6 +12,42 @@
 
 #include "include/kfs.h"
 
+void	print_stack_thing( void )
+{
+	uint32	esp;
+	// uint32	*ebp;
+	int		i = 0;
+
+	asm volatile ("mov %%esp, %0" : "=r"(esp));
+	// asm volatile ("mov %%ebp, %0" : "=r"(ebp));
+
+	print_string("\n", L_BLUE);
+	while (i < 10)
+	{
+		if (i % 3 == 0)
+			print_string("\n", WHITE);
+		else
+			print_string(" | ", WHITE);
+		uint32 *ptr = (uint32 *)(esp + i * 4);
+		print_string("0x", BLUE);
+		ft_putnbr_hex(esp + i * 4, BLUE);
+		print_string(" : ", BLUE);
+		print_string("0x", BLUE);
+		ft_putnbr_hex(ptr[i] * 4, BLUE);
+		// print_char(esp, BLUE);
+		print_string(" ", RED);
+		// ft_putnbr(i, BLUE);
+		// print_string("\n", RED);
+		i++;
+	}
+	i = 0;
+	print_string("\n", RED);
+
+	// ft_putnbr_hex(ebp, L_RED);
+	print_string("\n", WHITE);
+
+}
+
 int		ft_is_only_space(char *str) {
 	
 	int	i;
@@ -33,7 +69,6 @@ int		ft_is_nl(char *str)
 	return (1);
 }
 
-
 void    interpretor(char *str)
 {
     if (ft_strcmp(str, "help") == 0)
@@ -42,11 +77,11 @@ void    interpretor(char *str)
 		print_string("help      print a short builtin man\n", WHITE);
 		print_string("reboot    Reboots the kernel\n", WHITE);
 		print_string("halt      Stops CPU processes\n", WHITE);
-		print_string("stack     not implemented yet\n", WHITE);
+		print_string("stack     prints the kernel stack\n", WHITE);
 		print_string("clear     clears the screen (same as CTRL + L)\n", WHITE);
 	}
-	else if (ft_strcmp(str, "clear") == 0) {
-		// TODO
+	else if (ft_strcmp(str, "stack") == 0) {
+		print_stack_thing();
 	}
 	else if (ft_strcmp(str, "halt") == 0) {
 		halt();
