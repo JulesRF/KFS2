@@ -19,9 +19,24 @@ void	print_gdtr( void ) {
 		uint32 base;
 	} gdtr;
 	asm volatile ("sgdt %0" : "=m"(gdtr));
-
-	ft_putnbr_hex( gdtr.base , RED);
+	print_string("\n0x", WHITE);
+	ft_putnbr_hex( gdtr.base , L_RED);
+	print_string("\n", WHITE);
 }
+
+
+// uint32_t read_gdt_base() {
+//     uint16 size;
+//     uint32 base;
+
+//     asm volatile (
+//         "sgdt %[ptr]"      // Store GDT pointer into `ptr`
+//         : [ptr] "=m" ((struct { uint16 limit; uint32 base; }) { size, base })
+//     );
+
+//     return base;  // Return the GDT base address
+// }
+
 
 void	print_stack_thing( void )
 {
@@ -33,7 +48,7 @@ void	print_stack_thing( void )
 	// asm volatile ("mov %%ebp, %0" : "=r"(ebp));
 
 	print_string("\n", L_BLUE);
-	while (i < 5)
+	while (i < 15)
 	{
 		// if (i % 3 == 0)
 		// 	print_string("\n", WHITE);
@@ -52,10 +67,10 @@ void	print_stack_thing( void )
 		i++;
 	}
 	i = 0;
-	print_string("\n", RED);
+	// print_string("\n", RED);
 
 	// ft_putnbr_hex(ebp, L_RED);
-	print_string("\n", WHITE);
+	// print_string("\n", WHITE);
 
 }
 
@@ -95,7 +110,7 @@ void    interpretor(char *str)
 		print_stack_thing();
 	}
 	else if (ft_strcmp(str, "gdt") == 0) {
-		print_gdtr();
+		verify_gdt();
 	}
 	else if (ft_strcmp(str, "halt") == 0) {
 		halt();

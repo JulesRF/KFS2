@@ -5,26 +5,26 @@
 typedef unsigned short	uint16_t;
 typedef unsigned int	uint32_t;
 
-// Structure for a GDT entry (8 bytes per entry)
-struct gdt_entry
-{
-	uint16	limit_low;
-	uint16	base_low;
-	uint8	base_middle;
-	uint8	access;
-	uint8	granularity;
-	uint8	base_high;
+/* GDT Entry Structure (8 bytes per entry) */
+struct GDTEntry {
+    uint16 limit_low;  // Lower 16 bits of segment limit
+    uint16 base_low;   // Lower 16 bits of segment base
+    uint8  base_middle; // Next 8 bits of segment base
+    uint8  access;     // Access flags
+    uint8  granularity; // Granularity and high limit
+    uint8  base_high;  // Last 8 bits of segment base
 } __attribute__((packed));
 
-// Structure to hold the GDT pointer
-struct gdt_ptr
-{
-	uint16_t	limit;
-	uint32_t	base;
+/* GDT Pointer Structure (6 bytes) */
+struct GDTPtr {
+    uint16 limit;  // Size of the GDT - 1
+    uint32 base;   // Address of the GDT
 } __attribute__((packed));
 
 // Function to initialize and load the GDT
-extern void	load_gdt(struct gdt_ptr*);
+extern void load_gdt(struct GDTPtr* gdtp);
 void		init_gdt(void);
+void 		verify_gdt(void);
+
 
 #endif

@@ -5,6 +5,9 @@ SECTIONS
 {
 	/* we need 1MB of space atleast */
 	. = 1M;
+	.gdt 0x800 : {
+        KEEP(*(.GDT))
+    }
 
   	/* text section */
 	.text BLOCK(4K) : ALIGN(4K)
@@ -12,6 +15,7 @@ SECTIONS
 		*(.multiboot)
 		*(.text)
 	}
+
 
 	/* read only data section */
 	.rodata BLOCK(4K) : ALIGN(4K)
