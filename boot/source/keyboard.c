@@ -75,6 +75,8 @@ void	print_letters(uint8 scancode) {
 	// Check if scancode is within valid range
 	if (scancode <= 0x3A) {
 
+		if (scancode == 0x01)
+			poweroff();
 		// SHIFT PRESS
 		if ((scancode == 0x2A) || scancode == 0x36 )
 			isShiftPressed = 1;

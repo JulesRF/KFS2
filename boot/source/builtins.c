@@ -12,6 +12,17 @@
 
 #include "include/kfs.h"
 
+void	print_gdtr( void ) {
+
+	struct {
+		uint16 limit;
+		uint32 base;
+	} gdtr;
+	asm volatile ("sgdt %0" : "=m"(gdtr));
+
+	ft_putnbr_hex( gdtr.base , RED);
+}
+
 void	print_stack_thing( void )
 {
 	uint32	esp;
@@ -22,22 +33,22 @@ void	print_stack_thing( void )
 	// asm volatile ("mov %%ebp, %0" : "=r"(ebp));
 
 	print_string("\n", L_BLUE);
-	while (i < 10)
+	while (i < 5)
 	{
-		if (i % 3 == 0)
-			print_string("\n", WHITE);
-		else
-			print_string(" | ", WHITE);
+		// if (i % 3 == 0)
+		// 	print_string("\n", WHITE);
+		// else
+		// print_string(" | ", WHITE);
 		uint32 *ptr = (uint32 *)(esp + i * 4);
-		print_string("0x", BLUE);
-		ft_putnbr_hex(esp + i * 4, BLUE);
-		print_string(" : ", BLUE);
-		print_string("0x", BLUE);
-		ft_putnbr_hex(ptr[i] * 4, BLUE);
+		print_string("0x", WHITE);
+		ft_putnbr_hex(esp + i * 4, L_RED);
+		print_string(" -> ", WHITE);
+		print_string("0x", WHITE);
+		ft_putnbr_hex(ptr[i] * 4, L_RED);
 		// print_char(esp, BLUE);
 		print_string(" ", RED);
 		// ft_putnbr(i, BLUE);
-		// print_string("\n", RED);
+		print_string("\n", RED);
 		i++;
 	}
 	i = 0;
@@ -82,6 +93,9 @@ void    interpretor(char *str)
 	}
 	else if (ft_strcmp(str, "stack") == 0) {
 		print_stack_thing();
+	}
+	else if (ft_strcmp(str, "gdt") == 0) {
+		print_gdtr();
 	}
 	else if (ft_strcmp(str, "halt") == 0) {
 		halt();
