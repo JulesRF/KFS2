@@ -34,15 +34,13 @@ void set_gdt_entry(int index, uint32 base, uint32 limit, uint8 access, uint8 gra
 extern void load_gdt(struct GDTPtr* gdtp);
 
 // // Initialize the GDT (Null, Code, Data)
-void init_gdt() {
+void init_gdt()
+{
     uint32 gdt_base = 0x00000800;
-
     gdtp.limit = (sizeof(struct GDTEntry) * 3) - 1;
     gdtp.base = gdt_base;  // Set the GDT pointer base to 0x00000800
 
-    // Null descriptor (must be zero)
-    set_gdt_entry(0, 0, 0, 0, 0x0);
-
+    set_gdt_entry(0, 0, 0x00000, 0x00, 0x0); // NULL DESCRIPTOR
     set_gdt_entry(1, 0, 0xFFFFF, 0x9A, 0xC); // KERNEL CODE
     set_gdt_entry(2, 0, 0xFFFFF, 0x92, 0xC); // KERNEL DATA
     set_gdt_entry(3, 0, 0xFFFFF, 0xFA, 0xC); // USER CODE
