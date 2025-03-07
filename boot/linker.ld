@@ -3,33 +3,35 @@ ENTRY(main)
 
 SECTIONS
 {
-	/* we need 1MB of space atleast */
-	. = 1M;
+    /* we need 1MB of space atleast */
+    . = 1M;
 
-  	/* text section */
-	.text BLOCK(4K) : ALIGN(4K)
-	{
-		*(.multiboot)
-		*(.text)
-	}
+    . += 0x800;
+    .gdt : { KEEP(*(.gdt)) }
 
+      /* text section */
+    .text BLOCK(4K) : ALIGN(4K)
+    {
+        *(.multiboot)
+        *(.text)
+    }
 
-	/* read only data section */
-	.rodata BLOCK(4K) : ALIGN(4K)
-	{
-		*(.rodata)
-	}
+    /* read only data section */
+    .rodata BLOCK(4K) : ALIGN(4K)
+    {
+        *(.rodata)
+    }
 
-	/* data section */
-	.data BLOCK(4K) : ALIGN(4K)
-	{
-		*(.data)
-	}
+    /* data section */
+    .data BLOCK(4K) : ALIGN(4K)
+    {
+        *(.data)
+    }
 
-	/* bss section */
-	.bss BLOCK(4K) : ALIGN(4K)
-	{
-		*(COMMON)
-		*(.bss)
-	}
+    /* bss section */
+    .bss BLOCK(4K) : ALIGN(4K)
+    {
+        *(COMMON)
+        *(.bss)
+    }
 }
