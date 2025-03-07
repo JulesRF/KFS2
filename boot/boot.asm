@@ -32,7 +32,6 @@ start:
     cli                             ; Disable interrupts
 
     ; Load the GDT using the function in C (safer than directly using lgdt here)
-    push gdtp
     call load_gdt
 
     sti                             ; Re-enable interrupts

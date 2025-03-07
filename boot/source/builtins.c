@@ -11,6 +11,79 @@
 /* ************************************************************************** */
 
 #include "include/kfs.h"
+#define GET_STACK_POINTER(x)	asm volatile("mov %%esp, %0" : "=r"(x) ::)
+#define GET_STACK_FRAME(x)		asm volatile("mov %%ebp, %0" : "=r"(x) ::)
+
+void	hex_to_str(unsigned int addr, char *result, int size)
+{
+	int	len;
+	char	base_str[16] = "0123456789abcdef";
+
+	len = size - 1;
+	ft_memset(result, '0', size);
+	result[size - 1] = 0;
+	while (addr != 0)
+	{
+		result[--len] = base_str[addr % 16];
+		addr = addr / 16;
+	}
+}
+
+void	hexdump(uint32 addr, int limit)
+{
+	char *c = (char *)addr;
+	char str_addr[9];
+	int i;
+	uint32 previous;
+
+	if (limit <= 0)
+		return;
+	for (i = 0; i < limit; i++)
+	{
+		if ((i % 16) == 0) // 16 = size line
+		{
+			if (i != 0)
+			{
+				previous = addr - 16;
+				while (previous < addr)
+				{
+					if (*(char *)previous <= 32)
+						print_char('.', RED);
+					else
+						print_char(*(char *)previous, GREEN);
+					previous++;
+				}
+				print_string("\n", WHITE);
+			}
+			if ((uint32)0x00000800 == addr)
+				ft_putnbr_hex(CYAN, addr);
+			else
+				ft_putnbr_hex(L_BLUE, addr);
+		}
+		hex_to_str((uint32)c[i], str_addr, 3);
+		if ((uint32)c[i] == 0) // == 00
+			print_string(str_addr, BROWN);
+		else
+		print_string(str_addr, GREEN);
+		addr++;
+	}
+	print_debug(ft_itoa(i), RED);
+	for (i = 0; i < ((limit % 16) * 3); i++) // last line
+		print_char(' ', WHITE);
+	if ((limit % 16) == 0)
+		previous = addr - 16;
+	else
+		previous = addr - (limit % 16);
+	while (previous < addr)
+	{
+		if (*(char *)previous <= 32)
+			print_char('.', RED);
+		else
+			print_char(*(char *)previous, GREEN);
+		previous++;
+	}
+	print_string("\n", WHITE);
+}
 
 void	print_gdtr( void ) {
 
@@ -107,10 +180,16 @@ void    interpretor(char *str)
 		print_string("clear     clears the screen (same as CTRL + L)\n", WHITE);
 	}
 	else if (ft_strcmp(str, "stack") == 0) {
-		print_stack_thing();
+		// print_stack_thing();
+		uint32 sp;
+		int sf;
+		print_string("\n", WHITE);
+		GET_STACK_POINTER(sp);
+		GET_STACK_FRAME(sf);
+		hexdump(sp, sf);
 	}
 	else if (ft_strcmp(str, "gdt") == 0) {
-		verify_gdt();
+		
 	}
 	else if (ft_strcmp(str, "halt") == 0) {
 		halt();
