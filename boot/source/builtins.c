@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rdel-agu <rdel-agu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: qvy <qvy@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 13:22:14 by rdel-agu          #+#    #+#             */
-/*   Updated: 2024/12/20 15:28:33 by rdel-agu         ###   ########.fr       */
+/*   Updated: 2025/03/10 18:17:10 by qvy              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,11 @@ void	hexdump(uint32 addr, int limit)
 {
 	char *c = (char *)addr;
 	char str_addr[9];
+	char tmpaddr[9];
 	int i;
 	uint32 previous;
 
+	print_string("\n", WHITE);
 	if (limit <= 0)
 		return;
 	for (i = 0; i < limit; i++)
@@ -50,21 +52,46 @@ void	hexdump(uint32 addr, int limit)
 					if (*(char *)previous <= 32)
 						print_char('.', RED);
 					else
-						print_char(*(char *)previous, GREEN);
+						print_char(*(char *)previous, L_GREEN);
 					previous++;
 				}
 				print_string("\n", WHITE);
 			}
 			if ((uint32)0x00000800 == addr)
-				ft_putnbr_hex(CYAN, addr);
+			{
+				ft_memset(tmpaddr, 0, sizeof(tmpaddr));
+				hex_to_str(addr, tmpaddr ,sizeof(addr));
+				print_string("0x", L_GREEN);
+				print_string(tmpaddr, L_GREEN);
+				print_string(": ", L_GREEN);
+				// print_string("\n", CYAN);
+				// ft_putnbr_hex(addr, CYAN);
+
+			}
 			else
-				ft_putnbr_hex(L_BLUE, addr);
+			{
+				// char tmpaddr[9];
+				ft_memset(tmpaddr, 0, sizeof(tmpaddr));
+				hex_to_str(addr, tmpaddr ,sizeof(addr));
+				print_string("0x", WHITE);
+				print_string(tmpaddr, WHITE);
+				// print_string("\n", L_BLUE);
+				// ft_putnbr_hex(addr, L_BLUE);
+				print_string(": ", WHITE);
+
+			}
 		}
 		hex_to_str((uint32)c[i], str_addr, 3);
 		if ((uint32)c[i] == 0) // == 00
+		{
 			print_string(str_addr, BROWN);
+			print_string(" ", WHITE);
+		}
 		else
-		print_string(str_addr, GREEN);
+		{
+			print_string(str_addr, L_GREEN);
+			print_string(" ", WHITE);
+		}
 		addr++;
 	}
 	print_debug(ft_itoa(i), RED);
@@ -79,7 +106,7 @@ void	hexdump(uint32 addr, int limit)
 		if (*(char *)previous <= 32)
 			print_char('.', RED);
 		else
-			print_char(*(char *)previous, GREEN);
+			print_char(*(char *)previous, L_GREEN);
 		previous++;
 	}
 	print_string("\n", WHITE);
@@ -183,13 +210,12 @@ void    interpretor(char *str)
 		// print_stack_thing();
 		uint32 sp;
 		int sf;
-		print_string("\n", WHITE);
 		GET_STACK_POINTER(sp);
 		GET_STACK_FRAME(sf);
-		hexdump(sp, sf);
+		hexdump(sp, sf - sp);
 	}
 	else if (ft_strcmp(str, "gdt") == 0) {
-		
+		hexdump(0x000007c0, 100);
 	}
 	else if (ft_strcmp(str, "halt") == 0) {
 		halt();

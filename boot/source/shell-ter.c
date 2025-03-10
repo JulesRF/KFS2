@@ -1,5 +1,6 @@
 #include "include/kfs.h"
 #include "include/io.h"
+#include "include/gdt.h"
 
 //cursor component
 
@@ -42,7 +43,7 @@ void shell_ter( void ) {
 	screen = 1;
 	ft_prompt();
 	screen = 0;
-
+    init_gdt();
 		vga_buffer[terminal_index[screen]] = (unsigned short)' ' | (unsigned short)WHITE << 8;
     	// vga_buffer[terminal_index[screen] + 1] = (unsigned short)' ' | (unsigned short)WHITE << 8;
 		// uint16 tmp_pos = terminal_index[screen] + 1;
