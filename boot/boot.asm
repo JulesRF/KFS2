@@ -8,7 +8,7 @@ section .multiboot
 section .text
 global start
 extern main                         ; Main function (from C)
-extern gdtp                         ; GDT pointer declared in C
+extern gdt_ptr                      ; GDT pointer declared in C
 
 global load_gdt                     ; Export the function for C
 
@@ -32,7 +32,7 @@ start:
     cli                             ; Disable interrupts
 
     ; Load the GDT using the function in C (safer than directly using lgdt here)
-    push gdtp
+    push gdt_ptr
     call load_gdt
 
     sti                             ; Re-enable interrupts
