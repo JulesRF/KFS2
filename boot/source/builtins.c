@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qvy <qvy@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: rdel-agu <rdel-agu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 13:22:14 by rdel-agu          #+#    #+#             */
-/*   Updated: 2025/03/10 18:17:10 by qvy              ###   ########.fr       */
+/*   Updated: 2025/03/13 16:27:41 by rdel-agu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	hexdump(uint32 addr, int limit)
 		}
 		addr++;
 	}
-	print_debug(ft_itoa(i), RED);
+	// print_debug(ft_itoa(i), RED);
 	for (i = 0; i < ((limit % 16) * 3); i++) // last line
 		print_char(' ', WHITE);
 	if ((limit % 16) == 0)
@@ -202,9 +202,10 @@ void    interpretor(char *str)
 		print_string("\n--- HELP ---\n", WHITE);
 		print_string("help      print a short builtin man\n", WHITE);
 		print_string("reboot    Reboots the kernel\n", WHITE);
+		print_string("poweroff  Powers off the machine\n", WHITE);
 		print_string("halt      Stops CPU processes\n", WHITE);
 		print_string("stack     prints the kernel stack\n", WHITE);
-		print_string("clear     clears the screen (same as CTRL + L)\n", WHITE);
+		print_string("gdt       prints memory around 0x800 to prove that the GDT is set\n", WHITE);
 	}
 	else if (ft_strcmp(str, "stack") == 0) {
 		// print_stack_thing();

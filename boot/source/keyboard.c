@@ -118,7 +118,6 @@ void	print_letters(uint8 scancode) {
 				cursor_index[screen] = 5000;
 				commands_index[screen] = ft_strlen(current_commands[screen]);
 			}
-			// TODO faire le ctrl + backspace pour retirer un mot entier
 			if (scancode == 0x0E) {
 				
 			}
@@ -164,7 +163,7 @@ void	print_letters(uint8 scancode) {
 				ft_update_tindex();
 			cursor_index[screen] = 5000;
 			current_commands[screen][commands_index[screen]] = '\0';
-			print_debug(current_commands[screen], RED);
+			// print_debug(current_commands[screen], RED);
 			// print_debug(ft_itoa(terminal_index[screen]), WHITE);
 			interpretor(current_commands[screen]);
 			clean_command_buffer();
@@ -172,7 +171,6 @@ void	print_letters(uint8 scancode) {
 			print_string("kfs-2 > ", L_BLUE);
 			line_size[screen] = 0;
 			reset_cursor();
-			// TODO
 		}
 		// F1-F10 PRESS
 	} else if (scancode >= 0x3B && scancode <=0x44 ) {
@@ -219,7 +217,7 @@ void	print_letters(uint8 scancode) {
 		// print_string("Unknown key\n", temp_color);
 		// ft_putnbr_hex(scancode, RED);
 	}
-	putnbr_debug(commands_index[screen], RED);
+	// putnbr_debug(commands_index[screen], RED);
 }
 
 void	keyboard_init() {
